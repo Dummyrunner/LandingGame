@@ -9,7 +9,6 @@ class GameWindow:
         self.height = CommonConstants.WINDOW_HEIGHT
         self.title = title
         self.display = pygame.display.set_mode((self.width, self.height))
-        # self.display.set_caption(self.title)
         self.clock = pygame.time.Clock()
         self.fps = CommonConstants.FPS
         self.is_running = True
