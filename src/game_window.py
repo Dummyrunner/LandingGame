@@ -1,6 +1,6 @@
 import pygame
 from src.common_constants import CommonConstants
-from colors import colors
+from src.colors import colors_dict
 
 
 class GameWindow:
@@ -9,7 +9,6 @@ class GameWindow:
         self.height = CommonConstants.WINDOW_HEIGHT
         self.title = title
         self.display = pygame.display.set_mode((self.width, self.height))
-        self.display.set_caption(self.title)
         self.clock = pygame.time.Clock()
         self.fps = CommonConstants.FPS
         self.is_running = True
@@ -18,4 +17,4 @@ class GameWindow:
         pygame.display.set_caption(title)
 
     def erase_screen(self):
-        self.window.fill(colors["white"])
+        self.display.fill(colors_dict["white"])
