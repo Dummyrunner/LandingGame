@@ -1,5 +1,5 @@
 import pygame
-from linear_kinematics import LinearKinematics
+from src.linear_kinematics import LinearKinematics
 
 
 class Rocket(pygame.sprite.Sprite, LinearKinematics):
