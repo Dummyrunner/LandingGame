@@ -16,5 +16,5 @@ class CommonConstants:
 
 @dataclass(frozen=True)
 class PhysicalBoundaries:
-    MAX_SPEED: float = 10e9
-    MAX_ACCELERATION: float = 10e9
+    MAX_SPEED: float = 1e9
+    MAX_ACCELERATION: float = 1e9

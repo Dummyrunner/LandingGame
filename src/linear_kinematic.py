@@ -3,24 +3,24 @@ from src.common_constants import PhysicalBoundaries
 
 
 class LinearKinematic:
-    velocity = Vec2d()
-    acceleration = Vec2d()
-    mass: float = 0
-
     def __init__(
         self, mass: float = 0, velocity: Vec2d = Vec2d(), acceleration: Vec2d = Vec2d()
     ):
-        self.mass = mass
-        self.velocity = velocity
-        self.acceleration = acceleration
+        self.mass = None
+        self.velocity = None
+        self.acceleration = None
+        self.set_mass(mass)
+        self.set_velocity(velocity)
+        self.set_acceleration(acceleration)
 
     def set_velocity(self, vel: Vec2d):
-        if vel > PhysicalBoundaries.MAX_SPEED:
+        if vel.length > PhysicalBoundaries.MAX_SPEED:
+            print("vel len: ", vel.length)
             vel = PhysicalBoundaries.MAX_SPEED * vel.normalized()
         self.velocity = vel
 
     def set_acceleration(self, acc: Vec2d):
-        if acc > PhysicalBoundaries.MAX_ACCELERATION:
+        if acc.length > PhysicalBoundaries.MAX_ACCELERATION:
             acc = PhysicalBoundaries.MAX_ACCELERATION * acc.normalized()
         self.acceleration = acc
 
