@@ -7,8 +7,8 @@ class Environment:
         self.meter_to_pixel_ratio = CommonConstants.METER_TO_PIXEL
         self.timestep_size = 1 / 60
 
-    def pixel_to_meter(self, pixe_to_: flo_ratioat) -> float:
+    def pixel_to_meter(self, pixel: float) -> float:
         return pixel * self.pixel2meter
 
-    def meter_to_pixel(self, mete_to_: flo_ratioat) -> float:
+    def meter_to_pixel(self, meter: float) -> float:
         return meter * self.meter2pixel
