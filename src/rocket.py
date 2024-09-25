@@ -1,6 +1,6 @@
 import pygame
 from src.dimensions2d import Dimensions2D
-from src.linear_kinematics import LinearKinematic
+from src.linear_kinematic import LinearKinematic
 from src.vec2d import Vec2d
 from src.landing_game_object import LandingGameObject
 from src.linear_physical_object import LinearPhysicalObject
