@@ -11,7 +11,7 @@ class LandingGameObject(pygame.sprite.Sprite):
         dimensions: Dimensions2D = Dimensions2D(),
         pos: Vec2d = Vec2d(),
     ) -> None:
-        super().__init__()
+        pygame.sprite.Sprite.__init__(self)
         self.rect: pygame.Rect = pygame.Rect(0, 0, 0, 0)
         self.pos = pos
         self.dimensions = dimensions
