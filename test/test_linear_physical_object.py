@@ -14,11 +14,27 @@ class TestLinearPhysicalObject:
         self.mass = 1e5
 
     def test_init(self):
-        LinearPhysicalObject(
-            self.dimensions, self.position, self.mass, self.velocity, self.acceleration
+        obj = LinearPhysicalObject(
+            image=None,
+            dimensions=self.dimensions,
+            pos=self.position,
+            mass=self.mass,
+            velocity=self.velocity,
+            acceleration=self.acceleration,
         )
-        LinearPhysicalObject(self.dimensions, self.position, self.mass, self.velocity)
-        LinearPhysicalObject(self.dimensions, self.position, self.mass)
+        obj = LinearPhysicalObject(
+            image=None,
+            dimensions=self.dimensions,
+            pos=self.position,
+            mass=self.mass,
+            velocity=self.velocity,
+        )
+        obj = LinearPhysicalObject(
+            image=None,
+            dimensions=self.dimensions,
+            pos=self.position,
+            mass=self.mass,
+        )
 
     def test_step(self):
         time_step = 0.1
@@ -28,7 +44,12 @@ class TestLinearPhysicalObject:
         expected_new_position = self.position + time_step * self.velocity
 
         obj = LinearPhysicalObject(
-            self.dimensions, self.position, self.mass, self.velocity, self.acceleration
+            image=None,
+            dimensions=self.dimensions,
+            pos=self.position,
+            mass=self.mass,
+            velocity=self.velocity,
+            acceleration=self.acceleration,
         )
         obj.step(time_step)
         assert obj.pos == expected_new_position

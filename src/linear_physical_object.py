@@ -1,3 +1,4 @@
+import pygame
 from src.vec2d import Vec2d
 from src.linear_kinematic import LinearKinematic
 from src.landing_game_object import LandingGameObject
@@ -7,6 +8,7 @@ from src.dimensions2d import Dimensions2D
 class LinearPhysicalObject(LandingGameObject, LinearKinematic):
     def __init__(
         self,
+        image: pygame.surface,
         dimensions: Dimensions2D,
         pos: Vec2d,
         mass: float,
@@ -14,7 +16,7 @@ class LinearPhysicalObject(LandingGameObject, LinearKinematic):
         acceleration: Vec2d = Vec2d(),
     ):
 
-        LandingGameObject.__init__(self, dimensions, pos)
+        LandingGameObject.__init__(self, image, dimensions, pos)
         self.kinematic = LinearKinematic(mass, velocity, acceleration)
 
     def step(self, time_step_width: float) -> None:

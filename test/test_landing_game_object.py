@@ -7,7 +7,7 @@ class TestLandingGameObject:
     def test_initialization(self):
         dimensions = Dimensions2D(200, 200)
         position = Vec2d(100, 100)
-        obj = LandingGameObject(dimensions, position)
+        obj = LandingGameObject(image=None, dimensions=dimensions, pos=position)
 
         assert obj.dimensions == dimensions
         assert obj.pos == position
@@ -18,7 +18,7 @@ class TestLandingGameObject:
     def test_align_rect_to_position(self):
         dimensions = Dimensions2D(200, 200)
         position = Vec2d(100, 100)
-        obj = LandingGameObject(dimensions, position)
+        obj = LandingGameObject(image=None, dimensions=dimensions, pos=position)
 
         new_position = Vec2d(300, 300)
         obj.pos = new_position

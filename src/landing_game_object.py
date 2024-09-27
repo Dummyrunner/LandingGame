@@ -8,6 +8,7 @@ class LandingGameObject(pygame.sprite.Sprite):
 
     def __init__(
         self,
+        image: pygame.surface,
         dimensions: Dimensions2D = Dimensions2D(),
         pos: Vec2d = Vec2d(),
     ) -> None:
@@ -15,6 +16,7 @@ class LandingGameObject(pygame.sprite.Sprite):
         self.rect: pygame.Rect = pygame.Rect(0, 0, 0, 0)
         self.pos = pos
         self.dimensions = dimensions
+        self.image = image
         self.align_rect_to_position()
 
     def align_rect_to_position(self) -> None:
