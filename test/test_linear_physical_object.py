@@ -21,7 +21,8 @@ class TestLinearPhysicalObject:
         LinearPhysicalObject(self.dimensions, self.position, self.mass)
 
     def test_step(self):
-        time_step = -0.1
+        time_step = 0.1
+        non_admissible_time_step = -0.1
 
         expected_new_velocity = self.velocity + time_step * self.acceleration
         expected_new_position = self.position + time_step * self.velocity
@@ -32,3 +33,5 @@ class TestLinearPhysicalObject:
         obj.step(time_step)
         assert obj.pos == expected_new_position
         assert obj.kinematic.velocity == expected_new_velocity
+        with pytest.raises(ValueError):
+            obj.step(non_admissible_time_step)

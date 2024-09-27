@@ -24,6 +24,10 @@ class LinearPhysicalObject(LandingGameObject, LinearKinematic):
         Args:
             time_step_width (float): len of timestep that should be simulated
         """
+        if time_step_width < 0:
+            raise ValueError(
+                f"Negative time {time_step_width} handed to LinearPhysicalObject.step. Only positive time admissible!"
+            )
         new_pos = self.pos + time_step_width * self.kinematic.velocity
         new_velocity = (
             self.kinematic.velocity + time_step_width * self.kinematic.acceleration

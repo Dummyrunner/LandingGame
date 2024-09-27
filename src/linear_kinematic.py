@@ -15,7 +15,6 @@ class LinearKinematic:
 
     def set_velocity(self, vel: Vec2d):
         if vel.length > PhysicalBoundaries.MAX_SPEED:
-            print("vel len: ", vel.length)
             vel = PhysicalBoundaries.MAX_SPEED * vel.normalized()
         self.velocity = vel
 
