@@ -33,8 +33,6 @@ class TestLinearKinematic:
         obj_too_accelerated_saturate = LinearKinematic(
             mass=5.0, velocity=Vec2d(), acceleration=acceleration_too_large
         )
-        print(obj_too_accelerated_saturate.acceleration.length)
-        print(PhysicalBoundaries.MAX_ACCELERATION)
         assert obj_too_accelerated_saturate.acceleration.length == pytest.approx(
             PhysicalBoundaries.MAX_SPEED, ABS_TOLERANCE
         )
