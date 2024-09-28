@@ -34,6 +34,7 @@ obj_list = pygame.sprite.Group()
 
 obj_list.add(ego)
 obj_list.add(ground)
+
 overlay = Overlay(
     create_pg_surface_from_color_and_size(
         colors_dict["black"],
