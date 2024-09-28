@@ -8,6 +8,7 @@ from src.landing_game_object import LandingGameObject
 from src.vec2d import Vec2d
 from src.colors import colors_dict
 from src.common_constants import CommonConstants
+from src.overlay import Overlay
 
 
 def create_pg_surface_from_color_and_size(color, size):
@@ -26,7 +27,6 @@ img_ground = create_pg_surface_from_color_and_size(
     colors_dict["green"], (CommonConstants.WINDOW_WIDTH, 10)
 )
 
-
 ego = Rocket(img_ego, rocket_pos, rocket_mass)
 ground = LandingGameObject(img_ground, ground_position)
 
@@ -34,6 +34,15 @@ obj_list = pygame.sprite.Group()
 
 obj_list.add(ego)
 obj_list.add(ground)
+overlay = Overlay(
+    create_pg_surface_from_color_and_size(
+        colors_dict["black"],
+        (CommonConstants.WINDOW_WIDTH, CommonConstants.WINDOW_HEIGHT),
+    ),
+    (0, 0),
+    obj_list,
+)
+obj_list.add(overlay)
 
 while True:
     for event in pygame.event.get():
