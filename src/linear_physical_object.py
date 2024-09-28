@@ -1,4 +1,3 @@
-from typing import Any
 import pygame
 from src.vec2d import Vec2d
 from src.linear_kinematic import LinearKinematic
