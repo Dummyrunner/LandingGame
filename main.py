@@ -31,12 +31,6 @@ img_ground = create_pg_surface_from_color_and_size(
 
 ego = Rocket(img_ego, rocket_pos, rocket_mass)
 ground = LandingGameObject(img_ground, ground_position)
-
-obj_list = pygame.sprite.Group()
-
-obj_list.add(ego)
-obj_list.add(ground)
-
 debug_overlay = Overlay(
     create_pg_surface_from_color_and_size(
         colors_dict["black"],
@@ -45,16 +39,19 @@ debug_overlay = Overlay(
     (0, 0),
     obj_list,
 )
-obj_list.add(debug_overlay)
-
 hud_overlay = Overlay(
     create_pg_surface_from_color_and_size(
         colors_dict["black"], (CommonConstants.WINDOW_WIDTH, 90)
     ),
     (0, CommonConstants.WINDOW_HEIGHT - 90),
-    [game_stats],
+    game_stats,
 )
 
+obj_list = pygame.sprite.Group()
+
+obj_list.add(ego)
+obj_list.add(ground)
+obj_list.add(debug_overlay)
 obj_list.add(hud_overlay)
 
 while True:
