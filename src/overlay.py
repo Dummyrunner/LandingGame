@@ -13,12 +13,13 @@ class Overlay(LandingGameObject):
         self.rect.topleft = position
 
     def render_text(self, fontsize=16):
+        self.image.fill((0, 0, 0))
         line = 0
         for i, obj in enumerate(self.obj_list):
             if obj is not self:
                 for attribute in vars(obj):
                     text_surface = self.font.render(
-                        f"Obj {i}: {attribute}={getattr(obj, attribute)}",
+                        f"{attribute}={getattr(obj, attribute)}",
                         True,
                         (255, 255, 255),
                     )

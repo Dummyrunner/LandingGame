@@ -49,9 +49,9 @@ obj_list.add(debug_overlay)
 
 hud_overlay = Overlay(
     create_pg_surface_from_color_and_size(
-        colors_dict["black"], (CommonConstants.WINDOW_WIDTH, 50)
+        colors_dict["black"], (CommonConstants.WINDOW_WIDTH, 90)
     ),
-    (0, 0),
+    (0, CommonConstants.WINDOW_HEIGHT - 90),
     [game_stats],
 )
 
@@ -66,5 +66,6 @@ while True:
     for i, obj in enumerate(obj_list):
         obj.update(CommonConstants.TIME_STEP)
         game_window.display.blit(obj.image, obj.rect)
+    game_stats.update(CommonConstants.TIME_STEP)
     pygame.display.update()
     game_window.clock.tick(game_window.fps)
