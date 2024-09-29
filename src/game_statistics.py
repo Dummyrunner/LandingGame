@@ -6,9 +6,17 @@ class GameStatistics:
         self.lives = 3
         self.level = 1
         self.time = 0
+        self.floattime = 0.0
 
-    def update(self, score: int, lives: int, level: int, time: float) -> None:
-        self.score = score
-        self.lives = lives
-        self.level = level
-        self.time = time
+    def update(self, time: float) -> None:
+        self.floattime += time
+        self.time = int(self.floattime)
+
+    def increment_score(self, increment: int) -> None:
+        self.score += increment
+
+    def decrement_lives(self) -> None:
+        self.lives -= 1
+
+    def increment_level(self) -> None:
+        self.level += 1
