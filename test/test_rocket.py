@@ -2,7 +2,7 @@ import pygame
 import pytest
 
 from src.colors import colors_dict
-from src.linear_physical_object import LinearPhysicalObject
+from src.rocket import Rocket
 from src.dimensions2d import Dimensions2D
 from src.vec2d import Vec2d
 
@@ -14,7 +14,7 @@ def example_image():
     return img
 
 
-class TestLinearPhysicalObject:
+class TestRocket:
     @pytest.fixture(autouse=True)
     def setup(self):
         self.dimensions = Dimensions2D(4, 8)
@@ -24,20 +24,20 @@ class TestLinearPhysicalObject:
         self.mass = 1e5
 
     def test_init(self, example_image):
-        obj = LinearPhysicalObject(
+        Rocket(
             image=example_image,
             pos=self.position,
             mass=self.mass,
             velocity=self.velocity,
             acceleration=self.acceleration,
         )
-        obj = LinearPhysicalObject(
+        Rocket(
             image=example_image,
             pos=self.position,
             mass=self.mass,
             velocity=self.velocity,
         )
-        obj = LinearPhysicalObject(
+        Rocket(
             image=example_image,
             pos=self.position,
             mass=self.mass,
@@ -50,7 +50,7 @@ class TestLinearPhysicalObject:
         expected_new_velocity = self.velocity + time_step * self.acceleration
         expected_new_position = self.position + time_step * self.velocity
 
-        obj = LinearPhysicalObject(
+        obj = Rocket(
             image=example_image,
             pos=self.position,
             mass=self.mass,

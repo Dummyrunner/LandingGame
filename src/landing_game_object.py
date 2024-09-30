@@ -1,5 +1,4 @@
 import pygame
-from src.dimensions2d import Dimensions2D
 from src.vec2d import Vec2d
 
 
@@ -8,17 +7,16 @@ class LandingGameObject(pygame.sprite.Sprite):
 
     def __init__(
         self,
-        dimensions: Dimensions2D = Dimensions2D(),
+        image: pygame.surface,
         pos: Vec2d = Vec2d(),
     ) -> None:
-        pygame.sprite.Sprite.__init__(self)
-        self.rect: pygame.Rect = pygame.Rect(0, 0, 0, 0)
+        super().__init__()
+        self.rect: pygame.Rect = pygame.Surface.get_rect(image)
         self.pos = pos
-        self.dimensions = dimensions
-        self.align_rect_to_position()
+        self.rect.center = self.pos
+        self.image = image
 
-    def align_rect_to_position(self) -> None:
-        """Assign current position and dimensions to object's rect"""
-        self.rect.width = self.dimensions.width
-        self.rect.height = self.dimensions.height
-        self.rect.center = (self.pos.x, self.pos.y)
+    def update(self, time_step: float) -> None:
+        # takes timestep argument like physical object,
+        # to be able to treat them in the same way
+        self.rect.center = self.pos
