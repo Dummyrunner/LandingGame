@@ -21,14 +21,13 @@ class Overlay(LandingGameObject):
         update(time_step): Updates the overlay.
     """
 
-    def __init__(self, image, position=(0, 0), objects_to_display="None"):
+    def __init__(self, image, font, alpha, position=(0, 0), objects_to_display=None):
         super().__init__(image, position)
-        fontsize = 16
-        self.image.set_alpha(128)
-        self.font = pygame.font.SysFont("calibri", fontsize)
-        self.objects_to_display = objects_to_display
+        self.image.set_alpha(alpha)
         self.rect = self.image.get_rect()
         self.rect.topleft = position
+        self.font = font
+        self.objects_to_display = objects_to_display
 
     def render_text(self, fontsize=16):
         self.image.fill((0, 0, 0))
@@ -60,5 +59,15 @@ class Overlay(LandingGameObject):
 
         print_list = None
 
+    def get_lines(self) -> list[str]:
+        objects_to_get_lines_from = []
+        is_list = isinstance(self.objects_to_display, list)
+        if is_list:
+            for item in self.objects_to_display:
+                if isinstance(item, LandingGameObject):
+                    objects_to_get_lines_from.append(item)
+        return self.print_list
+
     def update(self, time_step):
-        self.render_text()
+        lines = self.get_lines()
+        self.render_text(lines)
