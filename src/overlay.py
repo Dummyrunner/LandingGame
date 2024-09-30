@@ -27,8 +27,8 @@ class Overlay(LandingGameObject):
         font,
         alpha,
         position=(0, 0),
-        objects_to_display=None,
-        attributes_to_display=None,
+        objects_to_display=[],
+        attributes_to_display=[""],
     ):
         super().__init__(image, position)
         self.image.set_alpha(alpha)
@@ -36,7 +36,7 @@ class Overlay(LandingGameObject):
         self.rect.topleft = position
         self.font = font
         self.objects_to_display = objects_to_display
-        attributes_to_display = attributes_to_display
+        self.attributes_to_display = attributes_to_display
 
     def render_text(self, lines_ready_to_render) -> None:
         self.image.fill((0, 0, 0))
@@ -44,36 +44,36 @@ class Overlay(LandingGameObject):
 
         for line in lines_ready_to_render:
             text_surface = self.font.render(line, True, (255, 255, 255))
-            self.image.blit(text_surface, (0, line_number * self.font.get_size()))
+            self.image.blit(text_surface, (0, line_number * self.font.get_height()))
             line_number += 1
 
     def get_lines_ready_to_render(self) -> list[str]:
+        self.print_list = []
         if not isinstance(self.objects_to_display, list):
             self.objects_to_display = [self.objects_to_display]
         for obj in self.objects_to_display:
             for line in self.get_desired_lines_from_object(
-                obj, attribuses_to_display=None
+                obj, self.attributes_to_display
             ):
                 self.print_list.append(line)
             return self.print_list
 
     def get_desired_lines_from_object(self, obj, attributes_to_display) -> list[str]:
         desired_lines = []
-        if isinstance(obj, LandingGameObject):
+        print(obj)
+        print(attributes_to_display)
+        if isinstance(obj, pygame.sprite.Group):
+            for item in obj:
+                print(item)
+                self.get_desired_lines_from_object(item, attributes_to_display)
+        if isinstance(obj, (LandingGameObject, LinearPhysicalObject)):
             for attr, value in vars(obj).items():
-                (
+                if attr in attributes_to_display:
                     desired_lines.append(f"{attr}={value}")
-                    if attr in attributes_to_display
-                    else None
-                )
-            desired_lines.append("")
         elif isinstance(obj, GameStatistics):
             for attr, value in vars(obj).items():
-                (
+                if attr in attributes_to_display:
                     desired_lines.append(f"{attr}={value}")
-                    if attr in attributes_to_display
-                    else None
-                )
         elif isinstance(obj, dict):
             for key, value in obj.items():
                 (
@@ -86,7 +86,6 @@ class Overlay(LandingGameObject):
                 desired_lines.append(str(item))
         elif isinstance(obj, str):
             desired_lines.append(obj)
-
         return desired_lines
 
     def update(self, time_step) -> None:
