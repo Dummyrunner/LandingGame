@@ -43,7 +43,7 @@ class Overlay(LandingGameObject):
         elif isinstance(self.objects_to_display, GameStatistics):
             for attr, value in vars(self.objects_to_display).items():
                 if attr == "time" or "floattime":
-                    self.print_list.append(f"{attr}: {value}")
+                    self.print_list.append(f"{attr}={value}")
         elif isinstance(self.objects_to_display, dict):
             for key, value in self.objects_to_display.items():
                 self.print_list.append(f"{key}={value}")

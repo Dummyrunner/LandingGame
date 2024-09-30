@@ -9,11 +9,16 @@ class GameStatistics:
         self.floattime += time
         self.time_in_seconds = int(self.floattime)
 
-    def increment_score(self, increment: int) -> None:
-        self.score += increment
+    def set_time_in_seconds(self, time: int) -> None:
+        self.time_in_seconds = time
+        self.floattime = float(time)
 
-    def decrement_lives(self) -> None:
-        self.lives -= 1
+    def set_floattime(self, time: float) -> None:
+        self.floattime = time
+        self.time_in_seconds = int(time)
 
-    def increment_level(self) -> None:
-        self.level += 1
+    def get_time_in_seconds(self) -> int:
+        return self.time_in_seconds
+
+    def get_floattime(self) -> float:
+        return self.floattime

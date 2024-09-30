@@ -29,6 +29,8 @@ img_ground = create_pg_surface_from_color_and_size(
     colors_dict["green"], (CommonConstants.WINDOW_WIDTH, 10)
 )
 
+obj_list = pygame.sprite.Group()
+
 ego = Rocket(img_ego, rocket_pos, rocket_mass)
 ground = LandingGameObject(img_ground, ground_position)
 debug_overlay = Overlay(
@@ -47,7 +49,6 @@ hud_overlay = Overlay(
     game_stats,
 )
 
-obj_list = pygame.sprite.Group()
 
 obj_list.add(ego)
 obj_list.add(ground)
