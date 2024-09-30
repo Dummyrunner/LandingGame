@@ -21,53 +21,74 @@ class Overlay(LandingGameObject):
         update(time_step): Updates the overlay.
     """
 
-    def __init__(self, image, font, alpha, position=(0, 0), objects_to_display=None):
+    def __init__(
+        self,
+        image,
+        font,
+        alpha,
+        position=(0, 0),
+        objects_to_display=None,
+        attributes_to_display=None,
+    ):
         super().__init__(image, position)
         self.image.set_alpha(alpha)
         self.rect = self.image.get_rect()
         self.rect.topleft = position
         self.font = font
         self.objects_to_display = objects_to_display
+        attributes_to_display = attributes_to_display
 
-    def render_text(self, fontsize=16):
+    def render_text(self, lines_ready_to_render) -> None:
         self.image.fill((0, 0, 0))
-        self.print_list = []
         line_number = 0
 
-        if isinstance(self.objects_to_display, pygame.sprite.Group):
-            for obj in self.objects_to_display:
-                for attr, value in vars(obj).items():
-                    self.print_list.append(f"{attr}={value}")
-                self.print_list.append("")
-        elif isinstance(self.objects_to_display, GameStatistics):
-            for attr, value in vars(self.objects_to_display).items():
-                if attr == "time" or "floattime":
-                    self.print_list.append(f"{attr}={value}")
-        elif isinstance(self.objects_to_display, dict):
-            for key, value in self.objects_to_display.items():
-                self.print_list.append(f"{key}={value}")
-        elif isinstance(self.objects_to_display, list):
-            for item in self.objects_to_display:
-                self.print_list.append(str(item))
-        elif isinstance(self.objects_to_display, str):
-            self.print_list.append(self.objects_to_display)
-
-        for line in self.print_list:
+        for line in lines_ready_to_render:
             text_surface = self.font.render(line, True, (255, 255, 255))
-            self.image.blit(text_surface, (0, line_number * fontsize))
+            self.image.blit(text_surface, (0, line_number * self.font.get_size()))
             line_number += 1
 
-        print_list = None
+    def get_lines_ready_to_render(self) -> list[str]:
+        if not isinstance(self.objects_to_display, list):
+            self.objects_to_display = [self.objects_to_display]
+        for obj in self.objects_to_display:
+            for line in self.get_desired_lines_from_object(
+                obj, attribuses_to_display=None
+            ):
+                self.print_list.append(line)
+            return self.print_list
 
-    def get_lines(self) -> list[str]:
-        objects_to_get_lines_from = []
-        is_list = isinstance(self.objects_to_display, list)
-        if is_list:
-            for item in self.objects_to_display:
-                if isinstance(item, LandingGameObject):
-                    objects_to_get_lines_from.append(item)
-        return self.print_list
+    def get_desired_lines_from_object(self, obj, attributes_to_display) -> list[str]:
+        desired_lines = []
+        if isinstance(obj, LandingGameObject):
+            for attr, value in vars(obj).items():
+                (
+                    desired_lines.append(f"{attr}={value}")
+                    if attr in attributes_to_display
+                    else None
+                )
+            desired_lines.append("")
+        elif isinstance(obj, GameStatistics):
+            for attr, value in vars(obj).items():
+                (
+                    desired_lines.append(f"{attr}={value}")
+                    if attr in attributes_to_display
+                    else None
+                )
+        elif isinstance(obj, dict):
+            for key, value in obj.items():
+                (
+                    desired_lines.append(f"{key}={value}")
+                    if key in attributes_to_display
+                    else None
+                )
+        elif isinstance(obj, list):
+            for item in obj:
+                desired_lines.append(str(item))
+        elif isinstance(obj, str):
+            desired_lines.append(obj)
 
-    def update(self, time_step):
-        lines = self.get_lines()
-        self.render_text(lines)
+        return desired_lines
+
+    def update(self, time_step) -> None:
+        lines_ready_to_render = self.get_lines_ready_to_render()
+        self.render_text(lines_ready_to_render)
