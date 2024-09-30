@@ -38,15 +38,21 @@ debug_overlay = Overlay(
         colors_dict["black"],
         (CommonConstants.WINDOW_WIDTH, CommonConstants.WINDOW_HEIGHT),
     ),
+    pygame.font.SysFont("Calibri", 16),
+    128,
     (0, 0),
     obj_list,
+    ["pos", "velocity", "acceleration"],
 )
 hud_overlay = Overlay(
     create_pg_surface_from_color_and_size(
         colors_dict["black"], (CommonConstants.WINDOW_WIDTH, 90)
     ),
+    pygame.font.SysFont("Calibri", 16),
+    128,
     (0, CommonConstants.WINDOW_HEIGHT - 90),
     game_stats,
+    ["time_in_seconds"],
 )
 
 
