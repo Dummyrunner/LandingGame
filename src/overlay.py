@@ -2,6 +2,7 @@ import pygame
 from src.landing_game_object import LandingGameObject
 from src.linear_physical_object import LinearPhysicalObject
 from src.game_statistics import GameStatistics
+from src.linear_kinematic import LinearKinematic
 
 
 class Overlay(LandingGameObject):
@@ -64,12 +65,23 @@ class Overlay(LandingGameObject):
         print(attributes_to_display)
         if isinstance(obj, pygame.sprite.Group):
             for item in obj:
-                print(item)
-                self.get_desired_lines_from_object(item, attributes_to_display)
+                for attr, value in vars(item).items():
+                    if attr in attributes_to_display:
+                        desired_lines.append(f"{attr}={value}")
+                    elif attr == "kinematic":
+                        for kin_attr, kin_value in vars(value).items():
+                            if kin_attr in attributes_to_display:
+                                desired_lines.append(f"{kin_attr}={kin_value}")
+                desired_lines.append("")
         if isinstance(obj, (LandingGameObject, LinearPhysicalObject)):
             for attr, value in vars(obj).items():
                 if attr in attributes_to_display:
                     desired_lines.append(f"{attr}={value}")
+                elif isinstance(value, LinearKinematic):
+                    for attr, kin_value in vars(value).items():
+                        if attr in attributes_to_display:
+                            desired_lines.append(f"{attr}={kin_value}")
+                desired_lines.append("")
         elif isinstance(obj, GameStatistics):
             for attr, value in vars(obj).items():
                 if attr in attributes_to_display:
