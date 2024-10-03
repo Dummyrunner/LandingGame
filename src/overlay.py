@@ -82,7 +82,7 @@ class Overlay(LandingGameObject):
         formatted_line = self.format_line(
             obj, attribute_name, attribute_display_name, attribute_format_as
         )
-        self.add_line(formatted_line)
+        return formatted_line
 
     def add_attribute(
         self,
@@ -101,7 +101,8 @@ class Overlay(LandingGameObject):
             if isinstance(line, str):
                 self.print_list.append(line)
             elif isinstance(line, tuple):
-                self.get_line_from_object(*line)
+                attribute_as_formatted_string = self.get_line_from_object(*line)
+                print_list.append(attribute_as_formatted_string)
         return print_list
 
     def render_text(self, lines_ready_to_render: list[str] = [""]) -> None:
