@@ -33,15 +33,16 @@ class Overlay(LandingGameObject):
         self.rect = self.image.get_rect()
         self.rect.topleft = position
         self.font = font
+        self.line_order = []
         self.print_list = []
 
     def add_line(self, line) -> None:
         if isinstance(line, int):
-            self.print_list.append(str(line))
+            self.line_order.append(str(line))
         elif isinstance(line, float):
-            self.print_list.append(str(line))
+            self.line_order.append(str(line))
         elif isinstance(line, str):
-            self.print_list.append(line)
+            self.line_order.append(line)
         else:
             raise ValueError("Line must be of type int, float, or str")
 
@@ -70,13 +71,9 @@ class Overlay(LandingGameObject):
         elif attribute_format_as == str:
             return f"{attribute_display_name}: {str(obj.__dict__[attribute_name])}"
 
-    def add_attribute(
-        self,
-        obj: LandingGameObject,
-        attribute_name: str,
-        attribute_display_name: str,
-        attribute_format_as: type,
-    ) -> None:
+    def get_line_from_object(
+        self, obj, attribute_name, attribute_display_name, attribute_format_as
+    ) -> str:
         attribute_name, attribute_display_name, attribute_format_as = (
             self.normalize_attributes(
                 attribute_name, attribute_display_name, attribute_format_as
@@ -87,7 +84,27 @@ class Overlay(LandingGameObject):
         )
         self.add_line(formatted_line)
 
-    def render_text(self, lines_ready_to_render) -> None:
+    def add_attribute(
+        self,
+        obj: LandingGameObject,
+        attribute_name: str,
+        attribute_display_name: str,
+        attribute_format_as: type,
+    ) -> None:
+        self.line_order.append(
+            (obj, attribute_name, attribute_display_name, attribute_format_as)
+        )
+
+    def get_printlist(self) -> None:
+        print_list = []
+        for line in self.line_order:
+            if isinstance(line, str):
+                self.print_list.append(line)
+            elif isinstance(line, tuple):
+                self.get_line_from_object(*line)
+        return print_list
+
+    def render_text(self, lines_ready_to_render: list[str] = [""]) -> None:
         self.image.fill((0, 0, 0))
         line_number = 0
 
@@ -97,4 +114,5 @@ class Overlay(LandingGameObject):
             line_number += 1
 
     def update(self, time_step) -> None:
-        self.render_text(self.print_list)
+        print_list = self.get_printlist()
+        self.render_text(print_list)
