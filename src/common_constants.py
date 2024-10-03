@@ -1,3 +1,4 @@
+import pygame
 from dataclasses import dataclass
 
 
@@ -18,3 +19,21 @@ class CommonConstants:
 class PhysicalBoundaries:
     MAX_SPEED: float = 1e9
     MAX_ACCELERATION: float = 1e9
+
+
+@dataclass(frozen=True)
+class GameColors:
+    BLACK: tuple = (0, 0, 0)
+    WHITE: tuple = (255, 255, 255)
+    RED: tuple = (255, 0, 0)
+    GREEN: tuple = (0, 255, 0)
+    BLUE: tuple = (0, 0, 255)
+
+
+@dataclass(frozen=True)
+class GameFonts:
+    if not pygame.font.get_init():
+        pygame.font.init()
+    BASIC_FONT_TYPE: str = "Calibri"
+    BASIC_FONT_SIZE: int = 16
+    BASIC_FONT = pygame.font.SysFont(BASIC_FONT_TYPE, BASIC_FONT_SIZE)

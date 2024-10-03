@@ -1,8 +1,5 @@
 import pygame
 from src.landing_game_object import LandingGameObject
-from src.linear_physical_object import LinearPhysicalObject
-from src.game_statistics import GameStatistics
-from src.linear_kinematic import LinearKinematic
 
 
 class Overlay(LandingGameObject):
@@ -24,20 +21,71 @@ class Overlay(LandingGameObject):
 
     def __init__(
         self,
-        image,
-        font,
-        alpha,
+        image: pygame.Surface,
+        font: pygame.font.Font,
+        alpha: int = 128,
         position=(0, 0),
-        objects_to_display=[],
-        attributes_to_display=[""],
     ):
         super().__init__(image, position)
+        if not pygame.get_init():
+            pygame.init()
         self.image.set_alpha(alpha)
         self.rect = self.image.get_rect()
         self.rect.topleft = position
         self.font = font
-        self.objects_to_display = objects_to_display
-        self.attributes_to_display = attributes_to_display
+        self.print_list = []
+
+    def add_line(self, line) -> None:
+        if isinstance(line, int):
+            self.print_list.append(str(line))
+        elif isinstance(line, float):
+            self.print_list.append(str(line))
+        elif isinstance(line, str):
+            self.print_list.append(line)
+        else:
+            raise ValueError("Line must be of type int, float, or str")
+
+    def normalize_attributes(
+        self, attribute_name, attribute_display_name, attribute_format_as
+    ) -> None:
+        if attribute_name == None:
+            raise ValueError("Attribute name must not be None")
+        if not isinstance(attribute_name, str):
+            raise ValueError("Attribute name must be a string")
+        if attribute_display_name == None:
+            attribute_display_name = attribute_name
+        if attribute_format_as == None:
+            attribute_format_as = str
+        return attribute_name, attribute_display_name, attribute_format_as
+
+    def format_line(
+        self, obj, attribute_name, attribute_display_name, attribute_format_as
+    ) -> str:
+        if attribute_format_as == float:
+            return (
+                f"{attribute_display_name}: {float(obj.__dict__[attribute_name]):.2f}"
+            )
+        elif attribute_format_as == int:
+            return f"{attribute_display_name}: {int(obj.__dict__[attribute_name])}"
+        elif attribute_format_as == str:
+            return f"{attribute_display_name}: {str(obj.__dict__[attribute_name])}"
+
+    def add_attribute(
+        self,
+        obj: LandingGameObject,
+        attribute_name: str,
+        attribute_display_name: str,
+        attribute_format_as: type,
+    ) -> None:
+        attribute_name, attribute_display_name, attribute_format_as = (
+            self.normalize_attributes(
+                attribute_name, attribute_display_name, attribute_format_as
+            )
+        )
+        formatted_line = self.format_line(
+            obj, attribute_name, attribute_display_name, attribute_format_as
+        )
+        self.add_line(formatted_line)
 
     def render_text(self, lines_ready_to_render) -> None:
         self.image.fill((0, 0, 0))
@@ -48,58 +96,5 @@ class Overlay(LandingGameObject):
             self.image.blit(text_surface, (0, line_number * self.font.get_height()))
             line_number += 1
 
-    def get_lines_ready_to_render(self) -> list[str]:
-        self.print_list = []
-        if not isinstance(self.objects_to_display, list):
-            self.objects_to_display = [self.objects_to_display]
-        for obj in self.objects_to_display:
-            for line in self.get_desired_lines_from_object(
-                obj, self.attributes_to_display
-            ):
-                self.print_list.append(line)
-            return self.print_list
-
-    def get_desired_lines_from_object(self, obj, attributes_to_display) -> list[str]:
-        desired_lines = []
-        print(obj)
-        print(attributes_to_display)
-        if isinstance(obj, pygame.sprite.Group):
-            for item in obj:
-                for attr, value in vars(item).items():
-                    if attr in attributes_to_display:
-                        desired_lines.append(f"{attr}={value}")
-                    elif attr == "kinematic":
-                        for kin_attr, kin_value in vars(value).items():
-                            if kin_attr in attributes_to_display:
-                                desired_lines.append(f"{kin_attr}={kin_value}")
-                desired_lines.append("")
-        if isinstance(obj, (LandingGameObject, LinearPhysicalObject)):
-            for attr, value in vars(obj).items():
-                if attr in attributes_to_display:
-                    desired_lines.append(f"{attr}={value}")
-                elif isinstance(value, LinearKinematic):
-                    for attr, kin_value in vars(value).items():
-                        if attr in attributes_to_display:
-                            desired_lines.append(f"{attr}={kin_value}")
-                desired_lines.append("")
-        elif isinstance(obj, GameStatistics):
-            for attr, value in vars(obj).items():
-                if attr in attributes_to_display:
-                    desired_lines.append(f"{attr}={value}")
-        elif isinstance(obj, dict):
-            for key, value in obj.items():
-                (
-                    desired_lines.append(f"{key}={value}")
-                    if key in attributes_to_display
-                    else None
-                )
-        elif isinstance(obj, list):
-            for item in obj:
-                desired_lines.append(str(item))
-        elif isinstance(obj, str):
-            desired_lines.append(obj)
-        return desired_lines
-
     def update(self, time_step) -> None:
-        lines_ready_to_render = self.get_lines_ready_to_render()
-        self.render_text(lines_ready_to_render)
+        self.render_text(self.print_list)

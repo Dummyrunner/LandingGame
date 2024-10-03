@@ -7,9 +7,9 @@ from src.rocket import Rocket
 from src.landing_game_object import LandingGameObject
 from src.vec2d import Vec2d
 from src.colors import colors_dict
-from src.common_constants import CommonConstants
+from src.common_constants import CommonConstants, GameColors, GameFonts
 from src.overlay import Overlay
-from src.game_statistics import GameStatistics
+from src.game_timing import GameTiming
 
 
 def create_pg_surface_from_color_and_size(color, size):
@@ -18,9 +18,32 @@ def create_pg_surface_from_color_and_size(color, size):
     return surf
 
 
+def create_overlays():
+    debug_overlay = Overlay(
+        create_pg_surface_from_color_and_size(
+            GameColors.BLACK, (CommonConstants.WINDOW_WIDTH / 3, 400)
+        ),
+        GameFonts.BASIC_FONT,
+        128,
+        (10, 10),
+    )
+    debug_overlay.add_attribute(ground, "pos", "Altitude: ", None)
+    hud_overlay = Overlay(
+        create_pg_surface_from_color_and_size(
+            GameColors.BLACK, (CommonConstants.WINDOW_WIDTH - 20, 80)
+        ),
+        GameFonts.BASIC_FONT,
+        128,
+        (10, CommonConstants.WINDOW_HEIGHT - 90),
+    )
+    hud_overlay.add_line("Speed: ")
+    hud_overlay.add_attribute(game_timing, "time", "Time: ", float)
+    return debug_overlay, hud_overlay
+
+
 pygame.init()
 game_window = GameWindow("Landing Game")
-game_stats = GameStatistics()
+game_timing = GameTiming()
 rocket_pos = Vec2d(CommonConstants.WINDOW_WIDTH / 2, CommonConstants.WINDOW_HEIGHT / 2)
 rocket_mass = 1e5
 ground_position = Vec2d(0, 500)
@@ -33,33 +56,12 @@ obj_list = pygame.sprite.Group()
 
 ego = Rocket(img_ego, rocket_pos, rocket_mass)
 ground = LandingGameObject(img_ground, ground_position)
-debug_overlay = Overlay(
-    create_pg_surface_from_color_and_size(
-        colors_dict["black"],
-        (CommonConstants.WINDOW_WIDTH, CommonConstants.WINDOW_HEIGHT),
-    ),
-    pygame.font.SysFont("Calibri", 16),
-    128,
-    (0, 0),
-    obj_list,
-    ["pos", "velocity", "acceleration"],
-)
-hud_overlay = Overlay(
-    create_pg_surface_from_color_and_size(
-        colors_dict["black"], (CommonConstants.WINDOW_WIDTH, 90)
-    ),
-    pygame.font.SysFont("Calibri", 16),
-    128,
-    (0, CommonConstants.WINDOW_HEIGHT - 90),
-    game_stats,
-    ["time_in_seconds"],
-)
-
+overlays = create_overlays()
 
 obj_list.add(ego)
 obj_list.add(ground)
-obj_list.add(debug_overlay)
-obj_list.add(hud_overlay)
+for overlay in overlays:
+    obj_list.add(overlay)
 
 while True:
     for event in pygame.event.get():
@@ -70,6 +72,6 @@ while True:
     for i, obj in enumerate(obj_list):
         obj.update(CommonConstants.TIME_STEP)
         game_window.display.blit(obj.image, obj.rect)
-    game_stats.update(CommonConstants.TIME_STEP)
+    game_timing.update(CommonConstants.TIME_STEP)
     pygame.display.update()
     game_window.clock.tick(game_window.fps)
