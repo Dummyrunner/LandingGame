@@ -43,10 +43,14 @@ class Overlay(LandingGameObject):
         self.line_order = []
 
     def update(self, time_step) -> None:
+        """
+        Update the overlay.
+        """
         print_list = self.__get_printlist()
         self.__render_text(print_list)
 
     def add_line(self, line) -> None:
+        """Add a line to the overlay. The line can be an int, float, or str."""
         if isinstance(line, int):
             self.line_order.append(str(line))
         elif isinstance(line, float):
@@ -63,6 +67,7 @@ class Overlay(LandingGameObject):
         attribute_display_name: str,
         attribute_format_as: type,
     ) -> None:
+        """Add an attribute to the overlay. The attribute can be formatted as int, float, or str."""
         self.line_order.append(
             (obj, attribute_name, attribute_display_name, attribute_format_as)
         )
