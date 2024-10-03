@@ -50,7 +50,17 @@ def create_overlays():
     hud_overlay.add_attribute(game_timing, "time", "Time: ", float)
     hud_overlay.add_line("Time as int:")
     hud_overlay.add_attribute(game_timing, "time", "Time: ", int)
-    return debug_overlay, hud_overlay
+
+    rocket_label = Overlay(
+        create_pg_surface_from_color_and_size(colors_dict["blue"], (40, 16)),
+        GameFonts.BASIC_FONT,
+        128,
+        (10, 10),
+    )
+    rocket_label.attach_to_object(ego)
+    rocket_label.add_line("Rocket")
+
+    return debug_overlay, hud_overlay, rocket_label
 
 
 pygame.init()

@@ -1,5 +1,6 @@
 import pygame
 from src.landing_game_object import LandingGameObject
+from src.common_constants import GameColors
 
 
 class Overlay(LandingGameObject):
@@ -41,6 +42,7 @@ class Overlay(LandingGameObject):
         self.rect.topleft = position
         self.font = font
         self.line_order = []
+        self.attached_object = None
 
     def update(self, time_step) -> None:
         """
@@ -48,6 +50,7 @@ class Overlay(LandingGameObject):
         """
         print_list = self.__get_printlist()
         self.__render_text(print_list)
+        self.__update_position()
 
     def add_line(self, line) -> None:
         """Add a line to the overlay. The line can be an int, float, or str."""
@@ -71,6 +74,14 @@ class Overlay(LandingGameObject):
         self.line_order.append(
             (obj, attribute_name, attribute_display_name, attribute_format_as)
         )
+
+    def attach_to_object(self, obj: LandingGameObject) -> None:
+        """Attach the overlay to an object."""
+        self.attached_object = obj
+
+    def __update_position(self) -> None:
+        if self.attached_object:
+            self.rect.center = self.attached_object.rect.center
 
     def __normalize_attributes(
         self, attribute_name, attribute_display_name, attribute_format_as
@@ -125,6 +136,6 @@ class Overlay(LandingGameObject):
         line_number = 0
 
         for line in lines_ready_to_render:
-            text_surface = self.font.render(line, True, (255, 255, 255))
+            text_surface = self.font.render(line, True, (GameColors.WHITE))
             self.image.blit(text_surface, (0, line_number * self.font.get_height()))
             line_number += 1
