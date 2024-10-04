@@ -7,7 +7,7 @@ from src.rocket import Rocket
 from src.landing_game_object import LandingGameObject
 from src.vec2d import Vec2d
 from src.colors import colors_dict
-from src.common_constants import CommonConstants, GameColors, GameFonts
+from src.common_constants import CommonConstants, GameFonts, Opacity
 from src.overlay import Overlay
 from src.game_timing import GameTiming
 
@@ -21,11 +21,11 @@ def create_pg_surface_from_color_and_size(color, size):
 def create_overlays():
     debug_overlay = Overlay(
         create_pg_surface_from_color_and_size(
-            GameColors.BLACK, (CommonConstants.WINDOW_WIDTH / 3, 400)
+            colors_dict["black"], (CommonConstants.WINDOW_WIDTH / 3, 400)
         ),
         GameFonts.BASIC_FONT,
-        128,
         (10, 10),
+        Opacity.SEMI_TRANSPARENT,
     )
     debug_overlay.add_line("Debug Information:")
     debug_overlay.add_line("")
@@ -40,27 +40,18 @@ def create_overlays():
 
     hud_overlay = Overlay(
         create_pg_surface_from_color_and_size(
-            GameColors.BLACK, (CommonConstants.WINDOW_WIDTH - 20, 80)
+            colors_dict["black"], (CommonConstants.WINDOW_WIDTH - 20, 80)
         ),
         GameFonts.BASIC_FONT,
-        128,
         (10, CommonConstants.WINDOW_HEIGHT - 90),
+        Opacity.SEMI_TRANSPARENT,
     )
     hud_overlay.add_line("Time as float with 2 decimal places:")
     hud_overlay.add_attribute(game_timing, "time", "Time: ", float)
     hud_overlay.add_line("Time as int:")
     hud_overlay.add_attribute(game_timing, "time", "Time: ", int)
 
-    rocket_label = Overlay(
-        create_pg_surface_from_color_and_size(colors_dict["blue"], (40, 16)),
-        GameFonts.BASIC_FONT,
-        128,
-        (10, 10),
-    )
-    rocket_label.attach_to_object(ego)
-    rocket_label.add_line("Rocket")
-
-    return debug_overlay, hud_overlay, rocket_label
+    return debug_overlay, hud_overlay
 
 
 pygame.init()

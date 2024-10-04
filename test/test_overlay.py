@@ -95,11 +95,3 @@ def test_get_printlist(overlay):
     obj = TestObject()
     overlay.add_attribute(obj, "speed", "Speed", float)
     assert overlay._Overlay__get_printlist() == ["Test line", "Speed: 123.46"]
-
-
-def test_render_text(overlay):
-    pass  # Visual test only
-
-
-def test_update(overlay):
-    pass  # Visual test only

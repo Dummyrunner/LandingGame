@@ -1,6 +1,7 @@
 import pygame
 from src.landing_game_object import LandingGameObject
-from src.common_constants import GameColors
+from src.colors import colors_dict
+from src.common_constants import Opacity
 
 
 class Overlay(LandingGameObject):
@@ -31,8 +32,8 @@ class Overlay(LandingGameObject):
         self,
         image: pygame.Surface,
         font: pygame.font.Font,
-        alpha: int = 128,
         position=(0, 0),
+        alpha: int = Opacity.SEMI_TRANSPARENT,
     ):
         super().__init__(image, position)
         if not pygame.get_init():
@@ -53,13 +54,8 @@ class Overlay(LandingGameObject):
         self.__update_position()
 
     def add_line(self, line) -> None:
-        """Add a line to the overlay. The line can be an int, float, or str."""
-        if isinstance(line, int):
+        if isinstance(line, int) or isinstance(line, float) or isinstance(line, str):
             self.line_order.append(str(line))
-        elif isinstance(line, float):
-            self.line_order.append(str(line))
-        elif isinstance(line, str):
-            self.line_order.append(line)
         else:
             raise ValueError("Line must be of type int, float, or str")
 
@@ -74,10 +70,6 @@ class Overlay(LandingGameObject):
         self.line_order.append(
             (obj, attribute_name, attribute_display_name, attribute_format_as)
         )
-
-    def attach_to_object(self, obj: LandingGameObject) -> None:
-        """Attach the overlay to an object."""
-        self.attached_object = obj
 
     def __update_position(self) -> None:
         if self.attached_object:
@@ -132,10 +124,10 @@ class Overlay(LandingGameObject):
         return print_list
 
     def __render_text(self, lines_ready_to_render: list[str] = [""]) -> None:
-        self.image.fill((0, 0, 0))
+        self.image.fill((colors_dict["black"]))
         line_number = 0
 
         for line in lines_ready_to_render:
-            text_surface = self.font.render(line, True, (GameColors.WHITE))
+            text_surface = self.font.render(line, True, (colors_dict["white"]))
             self.image.blit(text_surface, (0, line_number * self.font.get_height()))
             line_number += 1
