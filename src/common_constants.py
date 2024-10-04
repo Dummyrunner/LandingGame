@@ -18,3 +18,9 @@ class CommonConstants:
 class PhysicalBoundaries:
     MAX_SPEED: float = 1e9
     MAX_ACCELERATION: float = 1e9
+
+
+@dataclass(frozen=True)
+class OpacityValues:
+    FULL_OPACITY: int = 255
+    NO_OPACITY: int = 0
