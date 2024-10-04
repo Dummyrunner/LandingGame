@@ -1,6 +1,6 @@
 import pygame
 
-from src.common_constants import OpacityValues
+from src.common_constants import Opacity
 from src.vec2d import Vec2d
 
 
@@ -18,11 +18,9 @@ class LandingGameObject(pygame.sprite.Sprite):
         self.rect.center = self.pos
         self.image = image
 
-    def update(self, time_step: float) -> None:
-        # takes timestep argument like physical object,
-        # to be able to treat them in the same way
+    def update(self, *args) -> None:
         self.rect.center = self.pos
 
-    def set_color(self, color, alpha=OpacityValues.FULL_OPACITY):
+    def set_color(self, color, alpha=Opacity.OPAQUE):
         self.image.fill(color)
         self.image.set_alpha(alpha)
