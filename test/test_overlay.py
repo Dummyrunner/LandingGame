@@ -119,6 +119,7 @@ def test_detach_from_object(overlay):
 
 
 def test_hide_show(overlay):
+    overlay.chosen_alpha = 255
     overlay.hide()
     assert overlay.image.get_alpha() == 0
 
