@@ -52,7 +52,16 @@ def create_overlays(ground, ego):
     hud_overlay.add_line("Time as int:")
     hud_overlay.add_attribute(game_timing, "time", "Time: ", int)
 
-    return debug_overlay, hud_overlay
+    rocket_label = Overlay(
+        create_pg_surface_from_color_and_size(colors_dict["black"], (50, 16)),
+        GameFonts.BASIC_FONT,
+        ego.rect.center,
+        Opacity.SEMI_TRANSPARENT,
+    )
+    rocket_label.add_line("Rocket ")
+    rocket_label.attach_to_object(ego)
+
+    return debug_overlay, hud_overlay, rocket_label
 
 
 pygame.init()
@@ -120,6 +129,9 @@ while True:
     game_window.erase_screen()
     for i, obj in enumerate(obj_list):
         obj.update(CommonConstants.TIME_STEP)
+        ego.pos = Vec2d(
+            ego.pos.x, ego.pos.y + 0.1
+        )  # Only for testing purposes - to make sure the overlay updates the position of the attached object
         game_window.display.blit(obj.image, obj.rect)
     game_timing.update(CommonConstants.TIME_STEP)
     pygame.display.update()

@@ -71,6 +71,28 @@ class Overlay(LandingGameObject):
             (obj, attribute_name, attribute_display_name, attribute_format_as)
         )
 
+    def attach_to_object(self, obj: LandingGameObject) -> None:
+        self.attached_object = obj
+
+    def detach_from_object(self) -> None:
+        self.attached_object = None
+
+    def hide(self) -> None:
+        self.image.set_alpha(Opacity.TRANSPARENT)
+
+    def show(self) -> None:
+        self.image.set_alpha(Opacity.OPAQUE)
+
+    def change_font(self, font: pygame.font.Font) -> None:
+        self.font = font
+
+    def reset_overlay(self) -> None:
+        self.line_order = []
+
+    def remove_first_line(self) -> None:
+        if len(self.line_order) > 0:
+            self.line_order.pop(0)
+
     def __update_position(self) -> None:
         if self.attached_object:
             self.rect.center = self.attached_object.rect.center
