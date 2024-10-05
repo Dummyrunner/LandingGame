@@ -52,16 +52,10 @@ def create_overlays(ground, ego):
     hud_overlay.add_line("Time as int:")
     hud_overlay.add_attribute(game_timing, "time", "Time: ", int)
 
-    rocket_label = Overlay(
-        create_pg_surface_from_color_and_size(colors_dict["black"], (50, 16)),
-        GameFonts.BASIC_FONT,
-        ego.rect.center,
-        Opacity.SEMI_TRANSPARENT,
+    return (
+        debug_overlay,
+        hud_overlay,
     )
-    rocket_label.add_line("Rocket ")
-    rocket_label.attach_to_object(ego)
-
-    return debug_overlay, hud_overlay, rocket_label
 
 
 pygame.init()
@@ -88,12 +82,16 @@ overlays = create_overlays(ground, ego)
 # predefine actions on key: keypress-states connected to actions that will be performed if state is given
 color_key_indicator_blue = lambda: key_indicator.set_color(colors_dict["blue"])
 color_key_indicator_cyan = lambda: key_indicator.set_color(colors_dict["cyan"])
+toggle_overlays = lambda overlays: [overlay.toggle_visibility() for overlay in overlays]
 
 act_change_box_color_on_spacebar_pressed = LandingGameActionOnKey(
     PygameKeyState(pygame.K_SPACE, True), color_key_indicator_blue
 )
 act_change_box_color_on_spacebar_not_pressed = LandingGameActionOnKey(
     PygameKeyState(pygame.K_SPACE, False), color_key_indicator_cyan
+)
+act_toggle_overlays_on_v_pressed = LandingGameActionOnKey(
+    PygameKeyState(pygame.K_v, True), lambda: toggle_overlays(overlays)
 )
 
 
@@ -108,6 +106,7 @@ for overlay in overlays:
 actions_on_key = [
     act_change_box_color_on_spacebar_pressed,
     act_change_box_color_on_spacebar_not_pressed,
+    act_toggle_overlays_on_v_pressed,
 ]
 
 while True:
