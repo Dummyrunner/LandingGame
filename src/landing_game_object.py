@@ -10,17 +10,33 @@ class LandingGameObject(pygame.sprite.Sprite):
     def __init__(
         self,
         image: pygame.surface,
-        pos: Vec2d = Vec2d(),
+        pos_pixel: Vec2d = Vec2d(),
     ) -> None:
         super().__init__()
         self.rect: pygame.Rect = pygame.Surface.get_rect(image)
-        self.pos = pos
-        self.rect.center = self.pos
+        self.rect.center = Vec2d(pos_pixel)
+        self.add_pos_to_dict()
         self.image = image
 
     def update(self, *args) -> None:
-        self.rect.center = self.pos
+        pass
 
     def set_color(self, color, alpha=Opacity.OPAQUE):
         self.image.fill(color)
         self.image.set_alpha(alpha)
+
+    @property
+    def pos(self) -> Vec2d:
+        return Vec2d(self.rect.center)
+
+    def set_pos(self, pos_pixel: Vec2d) -> None:
+        """set position in pixel standard coordinate system
+
+        Args:
+            pos_pixel (Vec2d): position in pixels
+        """
+        self.rect.center = Vec2d(pos_pixel)
+        self.add_pos_to_dict()
+
+    def add_pos_to_dict(self):
+        self.__dict__.update({"pos": self.pos})
