@@ -2,6 +2,7 @@ import pygame
 import sys
 from pygame.locals import *
 
+from src.general_physics import pixel_to_meter, meter_to_pixel
 from src.game_window import GameWindow
 from src.rocket import Rocket
 from src.landing_game_object import LandingGameObject
@@ -61,8 +62,10 @@ game_timing = GameTiming()
 rocket_pos = Vec2d(CommonConstants.WINDOW_WIDTH / 2, CommonConstants.WINDOW_HEIGHT / 2)
 rocket_mass = 1e5
 ground_position = Vec2d(CommonConstants.WINDOW_WIDTH / 2, 500)
-
-img_ego = create_pg_surface_from_color_and_size(colors_dict["red"], (30, 50))
+img_ego = create_pg_surface_from_color_and_size(
+    colors_dict["red"],
+    (meter_to_pixel(3.0), meter_to_pixel(8.0)),
+)
 img_ground = create_pg_surface_from_color_and_size(
     colors_dict["green"], (CommonConstants.WINDOW_WIDTH, 10)
 )

@@ -2,6 +2,7 @@ import pygame
 from src.vec2d import Vec2d
 from src.linear_kinematic import LinearKinematic
 from src.landing_game_object import LandingGameObject
+from src.general_physics import meter_to_pixel, pixel_to_meter
 
 
 class LinearPhysicalObject(LandingGameObject, LinearKinematic):
@@ -28,11 +29,14 @@ class LinearPhysicalObject(LandingGameObject, LinearKinematic):
             raise ValueError(
                 f"Negative time {time_step_width} handed to LinearPhysicalObject.step. Only positive time admissible!"
             )
-        new_pos = self.pos + time_step_width * self.kinematic.velocity
+        new_pos_meter = Vec2d(
+            pixel_to_meter(self.pos) + time_step_width * self.kinematic.velocity
+        )
+        new_pos_pixel = meter_to_pixel(new_pos_meter)
         new_velocity = (
             self.kinematic.velocity + time_step_width * self.kinematic.acceleration
         )
-        self.pos = new_pos
+        self.set_pos(new_pos_pixel)
         self.kinematic.set_velocity(new_velocity)
 
     def update(self, time_step):
