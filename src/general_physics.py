@@ -8,11 +8,13 @@ timestep_size: float = 1 / 60
 
 
 def pixel_to_meter(*args) -> float:
-    if type(args[0]) == float and len(args) == 1:
-        res = args[0] * pixel_to_meter_ratio
+    if type(args[0]) == float or type(args[0]) == int:
+        res = float(pixel_to_meter_ratio * args[0])
     elif type(*args) == tuple:
-        res = Vec2d(*args)
-    elif type(*args) == Vec2d:
+        res = Vec2d(
+            args[0][0] * pixel_to_meter_ratio, args[0][1] * pixel_to_meter_ratio
+        )
+    elif isinstance(*args, Vec2d):
         res = pixel_to_meter_ratio * args[0]
     else:
         raise TypeError(f"Only float or Vec2d acceptable, but {type(*args)} given")
@@ -20,10 +22,12 @@ def pixel_to_meter(*args) -> float:
 
 
 def meter_to_pixel(*args) -> float:
-    if type(args[0]) == float and len(args) == 1:
-        res = args[0] * meter_to_pixel_ratio
+    if type(args[0]) == float or type(args[0]) == int:
+        res = float(meter_to_pixel_ratio * args[0])
     elif type(*args) == tuple:
-        res = Vec2d(*args)
+        res = Vec2d(
+            args[0][0] * meter_to_pixel_ratio, args[0][1] * meter_to_pixel_ratio
+        )
     elif isinstance(*args, Vec2d):
         res = meter_to_pixel_ratio * args[0]
     else:

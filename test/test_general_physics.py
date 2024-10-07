@@ -4,24 +4,73 @@ from src.common_constants import CommonConstants
 from src.vec2d import Vec2d
 
 
+test_vector = Vec2d(1.2, 3.5)
+test_tuple = (1.2, 3.5)
+test_scalar_float = 3.5
+test_scalar_int = 3
+
+
 def test_time_step_size_defined():
     assert timestep_size
 
 
-def test_pixel_meter_conversion_scalar():
-    test_meter_distance = 3.5
-    test_pixel_distance = test_meter_distance * CommonConstants.METER_TO_PIXEL
-    assert meter_to_pixel(test_meter_distance) == test_pixel_distance
-    assert pixel_to_meter(test_pixel_distance) == test_meter_distance
+test_data_scalar = [
+    (
+        test_scalar_float,
+        test_scalar_float * CommonConstants.METER_TO_PIXEL,
+        test_scalar_float * CommonConstants.PIXEL_TO_METER,
+    ),
+    (
+        test_scalar_int,
+        test_scalar_int * CommonConstants.METER_TO_PIXEL,
+        test_scalar_int * CommonConstants.PIXEL_TO_METER,
+    ),
+]
+
+test_data_2dim = [
+    (
+        test_vector,
+        test_vector * CommonConstants.METER_TO_PIXEL,
+        test_vector * CommonConstants.PIXEL_TO_METER,
+    ),
+    (
+        test_tuple,
+        (
+            test_tuple[0] * CommonConstants.METER_TO_PIXEL,
+            test_tuple[1] * CommonConstants.METER_TO_PIXEL,
+        ),
+        (
+            test_tuple[0] * CommonConstants.PIXEL_TO_METER,
+            test_tuple[1] * CommonConstants.PIXEL_TO_METER,
+        ),
+    ),
+]
 
 
-def test_pixel_meter_conversion_vec2d():
-    test_meter_vec = Vec2d(1.2, 3.5)
-    test_pixel_vec = CommonConstants.METER_TO_PIXEL * test_meter_vec
-    assert meter_to_pixel(test_meter_vec).x == pytest.approx(test_pixel_vec.x)
-    assert meter_to_pixel(test_meter_vec).y == pytest.approx(test_pixel_vec.y)
-    assert pixel_to_meter(test_pixel_vec).x == pytest.approx(test_meter_vec.x)
-    assert pixel_to_meter(test_pixel_vec).y == pytest.approx(test_meter_vec.y)
+@pytest.mark.parametrize(
+    "input_scalar,expected_pixel_scalar,expected_meter_scalar", test_data_scalar
+)
+def test_pixel_meter_conversion_scalar(
+    input_scalar, expected_pixel_scalar, expected_meter_scalar
+):
+    output_pixel = meter_to_pixel(input_scalar)
+    output_meter = pixel_to_meter(input_scalar)
+
+    assert output_pixel == pytest.approx(expected_pixel_scalar)
+    assert output_meter == pytest.approx(expected_meter_scalar)
+
+
+@pytest.mark.parametrize(
+    "input_2d, expected_pixel_2d, expected_meter_2d", test_data_2dim
+)
+def test_pixel_meter_conversion_2dim(input_2d, expected_pixel_2d, expected_meter_2d):
+
+    output_pixel = meter_to_pixel(input_2d)
+    output_meter = pixel_to_meter(input_2d)
+    assert output_pixel[0] == pytest.approx(expected_pixel_2d[0])
+    assert output_pixel[1] == pytest.approx(expected_pixel_2d[1])
+    assert output_meter[0] == pytest.approx(expected_meter_2d[0])
+    assert output_meter[1] == pytest.approx(expected_meter_2d[1])
 
 
 def test_pixel_meter_conversion_invalid_type():
