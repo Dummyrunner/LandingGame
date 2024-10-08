@@ -95,3 +95,58 @@ def test_get_printlist(overlay):
     obj = TestObject()
     overlay.add_attribute(obj, "speed", "Speed", float)
     assert overlay._Overlay__get_printlist() == ["Test line", "Speed: 123.46"]
+
+
+def test_attach_to_object(overlay):
+    class TestObject(LandingGameObject):
+        def __init__(self):
+            self.rect = pygame.Rect(50, 50, 10, 10)
+
+    obj = TestObject()
+    overlay.attach_to_object(obj)
+    assert overlay.attached_object == obj
+
+
+def test_detach_from_object(overlay):
+    class TestObject(LandingGameObject):
+        def __init__(self):
+            self.rect = pygame.Rect(50, 50, 10, 10)
+
+    obj = TestObject()
+    overlay.attach_to_object(obj)
+    overlay.detach_from_object()
+    assert overlay.attached_object is None
+
+
+def test_hide_show(overlay):
+    overlay.original_alpha = 255
+    overlay.hide()
+    assert overlay.image.get_alpha() == 0
+
+    overlay.show()
+    assert overlay.image.get_alpha() == 255
+
+
+def test_set_font(overlay):
+    new_font = pygame.font.Font(None, 24)
+    overlay.set_font(new_font)
+    assert overlay.font == new_font
+
+
+def test_reset_overlay(overlay):
+    overlay.add_line("Test line")
+    overlay.reset_overlay()
+    assert overlay.line_order == []
+
+
+def test_remove_first_line(overlay):
+    overlay.add_line("First line")
+    overlay.add_line("Second line")
+    overlay.remove_first_line()
+    assert overlay.line_order == ["Second line"]
+
+    overlay.remove_first_line()
+    assert overlay.line_order == []
+
+    overlay.remove_first_line()  # Should not raise an error even if the list is empty
+    assert overlay.line_order == []

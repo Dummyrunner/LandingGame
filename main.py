@@ -53,7 +53,10 @@ def create_overlays(ground, ego):
     hud_overlay.add_line("Time as int:")
     hud_overlay.add_attribute(game_timing, "time", "Time: ", int)
 
-    return debug_overlay, hud_overlay
+    return (
+        debug_overlay,
+        hud_overlay,
+    )
 
 
 pygame.init()
@@ -82,12 +85,16 @@ overlays = create_overlays(ground, ego)
 # predefine actions on key: keypress-states connected to actions that will be performed if state is given
 color_key_indicator_blue = lambda: key_indicator.set_color(colors_dict["blue"])
 color_key_indicator_cyan = lambda: key_indicator.set_color(colors_dict["cyan"])
+toggle_overlays = lambda overlays: [overlay.toggle_visibility() for overlay in overlays]
 
 act_change_box_color_on_spacebar_pressed = LandingGameActionOnKey(
     PygameKeyState(pygame.K_SPACE, True), color_key_indicator_blue
 )
 act_change_box_color_on_spacebar_not_pressed = LandingGameActionOnKey(
     PygameKeyState(pygame.K_SPACE, False), color_key_indicator_cyan
+)
+act_toggle_overlays_on_v_pressed = LandingGameActionOnKey(
+    PygameKeyState(pygame.K_v, True), lambda: toggle_overlays(overlays)
 )
 
 
@@ -102,6 +109,7 @@ for overlay in overlays:
 actions_on_key = [
     act_change_box_color_on_spacebar_pressed,
     act_change_box_color_on_spacebar_not_pressed,
+    act_toggle_overlays_on_v_pressed,
 ]
 
 while True:
@@ -123,6 +131,9 @@ while True:
     game_window.erase_screen()
     for i, obj in enumerate(obj_list):
         obj.update(CommonConstants.TIME_STEP)
+        ego.pos = Vec2d(
+            ego.pos.x, ego.pos.y + 0.1
+        )  # Only for testing purposes - to make sure the overlay updates the position of the attached object
         game_window.display.blit(obj.image, obj.rect)
     game_timing.update(CommonConstants.TIME_STEP)
     pygame.display.update()
