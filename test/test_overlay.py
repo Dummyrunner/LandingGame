@@ -119,7 +119,7 @@ def test_detach_from_object(overlay):
 
 
 def test_hide_show(overlay):
-    overlay.chosen_alpha = 255
+    overlay.original_alpha = 255
     overlay.hide()
     assert overlay.image.get_alpha() == 0
 
@@ -127,9 +127,9 @@ def test_hide_show(overlay):
     assert overlay.image.get_alpha() == 255
 
 
-def test_change_font(overlay):
+def test_set_font(overlay):
     new_font = pygame.font.Font(None, 24)
-    overlay.change_font(new_font)
+    overlay.set_font(new_font)
     assert overlay.font == new_font
 
 
