@@ -54,7 +54,7 @@ def create_overlays(ground, ego):
 
     return debug_overlay, hud_overlay
     
-def process_events():
+def process_events(actions_on_key_pressed, actions_on_key_down):
     for event in pygame.event.get():
         if event.type == pygame.locals.QUIT:
             pygame.quit()
@@ -137,7 +137,7 @@ actions_on_key_pressed = [
 actions_on_key_down = [act_change_box_color_on_spacebar_down]
 
 while True:
-    process_events()
+    process_events(actions_on_key_pressed, actions_on_key_down)
     game_window.erase_screen()
     for i, obj in enumerate(obj_list):
         obj.update(CommonConstants.TIME_STEP)
