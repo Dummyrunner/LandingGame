@@ -38,8 +38,8 @@ class Overlay(LandingGameObject):
         super().__init__(image, position)
         if not pygame.get_init():
             pygame.init()
-        self.chosen_alpha = alpha
-        self.image.set_alpha(self.chosen_alpha)
+        self.original_alpha = alpha
+        self.image.set_alpha(self.original_alpha)
         self.rect = self.image.get_rect()
         self.rect.topleft = position
         self.font = font
@@ -82,7 +82,7 @@ class Overlay(LandingGameObject):
         self.image.set_alpha(Opacity.TRANSPARENT)
 
     def show(self) -> None:
-        self.image.set_alpha(self.chosen_alpha)
+        self.image.set_alpha(self.original_alpha)
 
     def toggle_visibility(self) -> None:
         if self.image.get_alpha() == Opacity.TRANSPARENT:
@@ -90,7 +90,7 @@ class Overlay(LandingGameObject):
         else:
             self.hide()
 
-    def change_font(self, font: pygame.font.Font) -> None:
+    def set_font(self, font: pygame.font.Font) -> None:
         self.font = font
 
     def reset_overlay(self) -> None:
