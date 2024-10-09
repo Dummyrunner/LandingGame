@@ -54,7 +54,7 @@ def create_overlays(ground, ego):
 
     return debug_overlay, hud_overlay
     
-def process_keyboard_events(actions_on_key_pressed, actions_on_key_down):
+def process_keyboard_events(actions_while_key_pressed, actions_on_key_down):
     for event in pygame.event.get():
         if event.type == pygame.locals.QUIT:
             pygame.quit()
@@ -66,7 +66,7 @@ def process_keyboard_events(actions_on_key_pressed, actions_on_key_down):
 
     # check all key states and automatically perform all callbacks
     key_press_state = pygame.key.get_pressed()
-    for action in actions_on_key_pressed:
+    for action in actions_while_key_pressed:
         trigger_action_given: bool = (
             action.trigger_key.pressed
             == key_press_state[action.trigger_key.key_identifier]
@@ -130,14 +130,14 @@ for overlay in overlays:
     obj_list.add(overlay)
 
 # bundle all keystate -> action correlations into one list
-actions_on_key_pressed = [
+actions_while_key_pressed = [
     act_change_box_color_on_spacebar_pressed,
     act_change_box_color_on_spacebar_not_pressed,
 ]
 actions_on_key_down = [act_change_box_color_on_spacebar_down]
 
 while True:
-    process_keyboard_events(actions_on_key_pressed, actions_on_key_down)
+    process_keyboard_events(actions_while_key_pressed, actions_on_key_down)
     game_window.erase_screen()
     for i, obj in enumerate(obj_list):
         obj.update(CommonConstants.TIME_STEP)
