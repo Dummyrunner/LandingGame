@@ -143,7 +143,6 @@ color_key_indicator_cyan_while_pressed = lambda: key_indicator_while_pressed.set
 
 color_key_indicator_blue_on_down = lambda: key_indicator_on_down.set_color(
     colors_dict["blue"]
-
 )
 color_key_indicator_cyan_on_down = lambda: key_indicator_on_down.set_color(
     colors_dict["cyan"]
@@ -190,9 +189,6 @@ while True:
     game_window.erase_screen()
     for i, obj in enumerate(obj_list):
         obj.update(CommonConstants.TIME_STEP)
-        ego.pos = Vec2d(
-            ego.pos.x, ego.pos.y + 0.1
-        )  # Only for testing purposes - to make sure the overlay updates the position of the attached object
         game_window.display.blit(obj.image, obj.rect)
     game_timing.update(CommonConstants.TIME_STEP)
     pygame.display.update()
