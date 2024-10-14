@@ -5,6 +5,7 @@ from src.colors import colors_dict
 from src.rocket import Rocket
 from src.dimensions2d import Dimensions2D
 from src.vec2d import Vec2d
+from src.general_physics import pixel_to_meter, meter_to_pixel
 
 
 @pytest.fixture
@@ -47,8 +48,10 @@ class TestRocket:
         time_step = 0.1
         non_admissible_time_step = -0.1
 
-        expected_new_velocity = self.velocity + time_step * self.acceleration
-        expected_new_position = self.position + time_step * self.velocity
+        expected_new_position_meter = (
+            pixel_to_meter(self.position) + time_step * self.velocity
+        )
+        expected_new_velocity_meter = self.velocity + time_step * self.acceleration
 
         obj = Rocket(
             image=example_image,
@@ -58,7 +61,7 @@ class TestRocket:
             acceleration=self.acceleration,
         )
         obj.step(time_step)
-        assert obj.pos == expected_new_position
-        assert obj.kinematic.velocity == expected_new_velocity
+        assert obj.pos == meter_to_pixel(expected_new_position_meter)
+        assert obj.kinematic.velocity == expected_new_velocity_meter
         with pytest.raises(ValueError):
             obj.step(non_admissible_time_step)
