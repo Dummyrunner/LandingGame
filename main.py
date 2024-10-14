@@ -52,10 +52,7 @@ def create_overlays(ground, ego, game_timing):
     hud_overlay.add_line("Time as int:")
     hud_overlay.add_attribute(game_timing, "time", "Time: ", int)
 
-    return (
-        debug_overlay,
-        hud_overlay,
-    )
+    return [debug_overlay, hud_overlay]
 
 
 def process_keyboard_events(actions_while_key_pressed, actions_on_key_down):
@@ -126,7 +123,7 @@ color_key_indicator_cyan_on_down = lambda: key_indicator_on_down.set_color(
     colors_dict["cyan"]
 )
 
-toggle_overlays_on_down = lambda: for overlay in overlays: overlay.toggle_visibility()
+toggle_overlay_visibility_on_down = lambda: overlays[0].toggle_visibility()
 
 act_change_box_color_while_spacebar_pressed = LandingGameActionOnKey(
     PygameKeyState(pygame.K_SPACE, True), color_key_indicator_blue_while_pressed
@@ -137,6 +134,10 @@ act_change_box_color_while_spacebar_not_pressed = LandingGameActionOnKey(
 
 act_change_box_color_on_spacebar_down = LandingGameActionOnKey(
     PygameKeyState(pygame.K_SPACE, True), color_key_indicator_blue_on_down
+)
+
+act_toggle_overlay_visibility_on_v_down = LandingGameActionOnKey(
+    PygameKeyState(pygame.K_v, True), toggle_overlay_visibility_on_down
 )
 
 
@@ -153,7 +154,10 @@ actions_while_key_pressed = [
     act_change_box_color_while_spacebar_pressed,
     act_change_box_color_while_spacebar_not_pressed,
 ]
-actions_on_key_down = [act_change_box_color_on_spacebar_down]
+actions_on_key_down = [
+    act_change_box_color_on_spacebar_down,
+    act_toggle_overlay_visibility_on_v_down,
+]
 
 while True:
     process_keyboard_events(actions_while_key_pressed, actions_on_key_down)
