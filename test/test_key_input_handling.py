@@ -56,38 +56,38 @@ def test_key_input_pressed_handling(keys_down_list, expected_color):
     game_window = GameWindow("Landing Game")
     game_timing = GameTiming()
 
-    img_key_indicator_pressed = create_pg_surface_from_color_and_size(
+    img_key_indicator_while_pressed = create_pg_surface_from_color_and_size(
         colors_dict["red"], (20, 20)
     )
 
-    key_indicator_pressed = LandingGameObject(
-        img_key_indicator_pressed,
+    key_indicator_while_pressed = LandingGameObject(
+        img_key_indicator_while_pressed,
         Vec2d(CommonConstants.WINDOW_WIDTH - 50, CommonConstants.WINDOW_HEIGHT - 50),
     )
-    coordinate_inside_key_inidicator_pressed = key_indicator_pressed.pos + Vec2d(1, 1)
+    coordinate_inside_key_inidicator = key_indicator_while_pressed.pos + Vec2d(1, 1)
 
     # predefine actions on key: keypress-states connected to actions that will be performed if state is given
-    color_key_indicator_blue_pressed = lambda: key_indicator_pressed.set_color(
+    color_key_indicator_blue_pressed = lambda: key_indicator_while_pressed.set_color(
         EXPECTED_COLOR_SPACEKEY_DOWN
     )
-    color_key_indicator_cyan_pressed = lambda: key_indicator_pressed.set_color(
+    color_key_indicator_cyan_pressed = lambda: key_indicator_while_pressed.set_color(
         EXPECTED_COLOR_SPACEKEY_UP
     )
 
-    act_change_box_color_on_spacebar_pressed = LandingGameActionOnKey(
+    act_change_box_color_while_spacebar_pressed = LandingGameActionOnKey(
         PygameKeyState(pygame.K_SPACE, True), color_key_indicator_blue_pressed
     )
-    act_change_box_color_on_spacebar_not_pressed = LandingGameActionOnKey(
+    act_change_box_color_while_spacebar_not_pressed = LandingGameActionOnKey(
         PygameKeyState(pygame.K_SPACE, False), color_key_indicator_cyan_pressed
     )
 
     obj_list = pygame.sprite.Group()
-    obj_list.add(key_indicator_pressed)
+    obj_list.add(key_indicator_while_pressed)
 
     # bundle all keystate -> action correlations into one list
     actions_while_key_pressed = [
-        act_change_box_color_on_spacebar_pressed,
-        act_change_box_color_on_spacebar_not_pressed,
+        act_change_box_color_while_spacebar_pressed,
+        act_change_box_color_while_spacebar_not_pressed,
     ]
 
     pygame.event.pump()
@@ -97,8 +97,7 @@ def test_key_input_pressed_handling(keys_down_list, expected_color):
         obj.update(CommonConstants.TIME_STEP)
         game_window.display.blit(obj.image, obj.rect)
     assert (
-        game_window.display.get_at(coordinate_inside_key_inidicator_pressed)
-        == expected_color
+        game_window.display.get_at(coordinate_inside_key_inidicator) == expected_color
     )
     game_timing.update(CommonConstants.TIME_STEP)
     pygame.display.update()
