@@ -53,7 +53,8 @@ def create_overlays(ground, ego):
     hud_overlay.add_attribute(game_timing, "time", "Time: ", int)
 
     return debug_overlay, hud_overlay
-    
+
+
 def process_keyboard_events(actions_while_key_pressed, actions_on_key_down):
     for event in pygame.event.get():
         if event.type == pygame.locals.QUIT:
@@ -74,6 +75,7 @@ def process_keyboard_events(actions_while_key_pressed, actions_on_key_down):
         if trigger_action_given:
             action.execute_action()
 
+
 pygame.init()
 game_window = GameWindow("Landing Game")
 game_timing = GameTiming()
@@ -85,16 +87,20 @@ img_ego = create_pg_surface_from_color_and_size(colors_dict["red"], (30, 50))
 img_ground = create_pg_surface_from_color_and_size(
     colors_dict["green"], (CommonConstants.WINDOW_WIDTH, 10)
 )
-img_key_indicator_pressed = create_pg_surface_from_color_and_size(colors_dict["cyan"], (20, 20))
+img_key_indicator_pressed = create_pg_surface_from_color_and_size(
+    colors_dict["cyan"], (20, 20)
+)
 
-key_indicator_pressed = LandingGameObject(
+key_indicator_while_pressed = LandingGameObject(
     img_key_indicator_pressed,
     Vec2d(CommonConstants.WINDOW_WIDTH - 50, CommonConstants.WINDOW_HEIGHT - 50),
 )
-img_key_indicator_down = create_pg_surface_from_color_and_size(colors_dict["cyan"], (20, 20))
+img_key_indicator_on_down = create_pg_surface_from_color_and_size(
+    colors_dict["cyan"], (20, 20)
+)
 
-key_indicator_down = LandingGameObject(
-    img_key_indicator_down,
+key_indicator_on_down = LandingGameObject(
+    img_key_indicator_on_down,
     Vec2d(CommonConstants.WINDOW_WIDTH - 100, CommonConstants.WINDOW_HEIGHT - 50),
 )
 
@@ -103,27 +109,35 @@ ground = LandingGameObject(img_ground, ground_position)
 overlays = create_overlays(ground, ego)
 
 # predefine actions on key: keypress-states connected to actions that will be performed if state is given
-color_key_indicator_blue_pressed = lambda: key_indicator_pressed.set_color(colors_dict["blue"])
-color_key_indicator_cyan_pressed = lambda: key_indicator_pressed.set_color(colors_dict["cyan"])
-
-color_key_indicator_blue_down = lambda: key_indicator_down.set_color(colors_dict["blue"])
-color_key_indicator_cyan_down = lambda: key_indicator_down.set_color(colors_dict["cyan"])
-
-act_change_box_color_on_spacebar_pressed = LandingGameActionOnKey(
-    PygameKeyState(pygame.K_SPACE, True), color_key_indicator_blue_pressed
+color_key_indicator_blue_while_pressed = lambda: key_indicator_while_pressed.set_color(
+    colors_dict["blue"]
 )
-act_change_box_color_on_spacebar_not_pressed = LandingGameActionOnKey(
-    PygameKeyState(pygame.K_SPACE, False), color_key_indicator_cyan_pressed
+color_key_indicator_cyan_while_pressed = lambda: key_indicator_while_pressed.set_color(
+    colors_dict["cyan"]
+)
+
+color_key_indicator_blue_on_down = lambda: key_indicator_on_down.set_color(
+    colors_dict["blue"]
+)
+color_key_indicator_cyan_on_down = lambda: key_indicator_on_down.set_color(
+    colors_dict["cyan"]
+)
+
+act_change_box_color_while_spacebar_pressed = LandingGameActionOnKey(
+    PygameKeyState(pygame.K_SPACE, True), color_key_indicator_blue_while_pressed
+)
+act_change_box_color_while_spacebar_not_pressed = LandingGameActionOnKey(
+    PygameKeyState(pygame.K_SPACE, False), color_key_indicator_cyan_while_pressed
 )
 
 act_change_box_color_on_spacebar_down = LandingGameActionOnKey(
-    PygameKeyState(pygame.K_SPACE, True), color_key_indicator_blue_down
+    PygameKeyState(pygame.K_SPACE, True), color_key_indicator_blue_on_down
 )
 
 
 obj_list = pygame.sprite.Group()
-obj_list.add(key_indicator_pressed)
-obj_list.add(key_indicator_down)
+obj_list.add(key_indicator_while_pressed)
+obj_list.add(key_indicator_on_down)
 obj_list.add(ego)
 obj_list.add(ground)
 for overlay in overlays:
@@ -131,8 +145,8 @@ for overlay in overlays:
 
 # bundle all keystate -> action correlations into one list
 actions_while_key_pressed = [
-    act_change_box_color_on_spacebar_pressed,
-    act_change_box_color_on_spacebar_not_pressed,
+    act_change_box_color_while_spacebar_pressed,
+    act_change_box_color_while_spacebar_not_pressed,
 ]
 actions_on_key_down = [act_change_box_color_on_spacebar_down]
 
