@@ -126,6 +126,8 @@ color_key_indicator_cyan_on_down = lambda: key_indicator_on_down.set_color(
     colors_dict["cyan"]
 )
 
+toggle_overlays_on_down = lambda: for overlay in overlays: overlay.toggle_visibility()
+
 act_change_box_color_while_spacebar_pressed = LandingGameActionOnKey(
     PygameKeyState(pygame.K_SPACE, True), color_key_indicator_blue_while_pressed
 )
