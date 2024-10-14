@@ -16,10 +16,10 @@ def example_image():
 class TestLandingGameObject:
 
     def test_initialization(self, example_image):
-        position = Vec2d(100, 100)
-        obj = LandingGameObject(image=example_image, pos=position)
+        position_pixel = Vec2d(100, 90)
+        obj = LandingGameObject(image=example_image, pos_pixel=position_pixel)
 
-        assert obj.pos == position
+        assert obj.pos == position_pixel
         assert obj.rect.width == example_image.get_width()
         assert obj.rect.height == example_image.get_height()
-        assert obj.rect.center == (position.x, position.y)
+        assert obj.rect.center == (position_pixel.x, position_pixel.y)

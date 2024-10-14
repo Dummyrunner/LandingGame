@@ -2,6 +2,7 @@ import pygame
 import sys
 from pygame.locals import *
 
+from src.general_physics import pixel_to_meter, meter_to_pixel
 from src.game_window import GameWindow
 from src.rocket import Rocket
 from src.landing_game_object import LandingGameObject
@@ -76,17 +77,41 @@ def process_keyboard_events(actions_while_key_pressed, actions_on_key_down):
             action.execute_action()
 
 
+def process_keyboard_events(actions_while_key_pressed, actions_on_key_down):
+    for event in pygame.event.get():
+        if event.type == pygame.locals.QUIT:
+            pygame.quit()
+            sys.exit()
+        elif event.type == pygame.locals.KEYDOWN:
+            for action in actions_on_key_down:
+                if event.key == action.trigger_key.key_identifier:
+                    action.execute_action()
+
+    # check all key states and automatically perform all callbacks
+    key_press_state = pygame.key.get_pressed()
+    for action in actions_while_key_pressed:
+        trigger_action_given: bool = (
+            action.trigger_key.pressed
+            == key_press_state[action.trigger_key.key_identifier]
+        )
+        if trigger_action_given:
+            action.execute_action()
+
+
 pygame.init()
 game_window = GameWindow("Landing Game")
 game_timing = GameTiming()
 rocket_pos = Vec2d(CommonConstants.WINDOW_WIDTH / 2, CommonConstants.WINDOW_HEIGHT / 2)
 rocket_mass = 1e5
 ground_position = Vec2d(CommonConstants.WINDOW_WIDTH / 2, 500)
-
-img_ego = create_pg_surface_from_color_and_size(colors_dict["red"], (30, 50))
+img_ego = create_pg_surface_from_color_and_size(
+    colors_dict["red"],
+    (meter_to_pixel(3.0), meter_to_pixel(8.0)),
+)
 img_ground = create_pg_surface_from_color_and_size(
     colors_dict["green"], (CommonConstants.WINDOW_WIDTH, 10)
 )
+
 img_key_indicator_while_pressed = create_pg_surface_from_color_and_size(
     colors_dict["cyan"], (20, 20)
 )
@@ -118,6 +143,7 @@ color_key_indicator_cyan_while_pressed = lambda: key_indicator_while_pressed.set
 
 color_key_indicator_blue_on_down = lambda: key_indicator_on_down.set_color(
     colors_dict["blue"]
+
 )
 color_key_indicator_cyan_on_down = lambda: key_indicator_on_down.set_color(
     colors_dict["cyan"]

@@ -16,16 +16,6 @@ class Overlay(LandingGameObject):
         rect (pygame.Rect): The rectangle of the overlay.
         line_order (list): The order of the lines to be displayed.
         print_list (list): The list of lines to be printed.
-
-    Methods:
-        update(time_step): Update the overlay.
-        add_line(line): Add a line to the overlay.
-        add_attribute(obj, attribute_name, attribute_display_name, attribute_format_as): Add an attribute to the overlay.
-        __normalize_attributes(attribute_name, attribute_display_name, attribute_format_as): Normalize the attribute values.
-        __format_line(obj, attribute_name, attribute_display_name, attribute_format_as): Format the attribute line.
-        __get_line_from_object(obj, attribute_name, attribute_display_name, attribute_format_as): Get the line from the object.
-        __get_printlist(): Get the list of lines to be printed.
-        __render_text(lines_ready_to_render): Render the text on the overlay.
     """
 
     def __init__(
@@ -46,15 +36,20 @@ class Overlay(LandingGameObject):
         self.line_order = []
         self.attached_object = None
 
-    def update(self, time_step) -> None:
-        """
-        Update the overlay.
-        """
+    def update(self, *args) -> None:
         print_list = self.__get_printlist()
         self.__render_text(print_list)
         self.__update_position()
 
     def add_line(self, line) -> None:
+        """Add a line to the overlay.
+
+        Args:
+            line (int or float or str): line to be added
+
+        Raises:
+            ValueError: unsupported line type
+        """
         if isinstance(line, int) or isinstance(line, float) or isinstance(line, str):
             self.line_order.append(str(line))
         else:
@@ -107,6 +102,20 @@ class Overlay(LandingGameObject):
     def __normalize_attributes(
         self, attribute_name, attribute_display_name, attribute_format_as
     ) -> None:
+        """Normalize attribute values.
+
+
+        Args:
+            attribute_name (_type_): _description_
+            attribute_display_name (_type_): _description_
+            attribute_format_as (_type_): _description_
+
+        Raises:
+            ValueError
+
+        Returns:
+            tuple: _attribute_name, attribute_display_name, attribute_format_as
+        """
         if attribute_name == None:
             raise ValueError("Attribute name must not be None")
         if not isinstance(attribute_name, str):
@@ -120,6 +129,17 @@ class Overlay(LandingGameObject):
     def __format_line(
         self, obj, attribute_name, attribute_display_name, attribute_format_as
     ) -> str:
+        """Format the attribute line by creating a string from display name and object data
+
+        Args:
+            obj (_type_): object to print info about within this overlay
+            attribute_name (_type_)
+            attribute_display_name (_type_)
+            attribute_format_as (_type_)
+
+        Returns:
+            str: _description_
+        """
         if attribute_format_as == float:
             return (
                 f"{attribute_display_name}: {float(obj.__dict__[attribute_name]):.2f}"
@@ -142,7 +162,13 @@ class Overlay(LandingGameObject):
         )
         return formatted_line
 
-    def __get_printlist(self) -> None:
+    def __get_printlist(self) -> list:
+        """Get the list of lines to be printed.
+
+
+        Returns:
+            list: _description_
+        """
         print_list = []
         for line in self.line_order:
             if isinstance(line, str):
@@ -153,6 +179,11 @@ class Overlay(LandingGameObject):
         return print_list
 
     def __render_text(self, lines_ready_to_render: list[str] = [""]) -> None:
+        """Render the text on the overlay.
+
+        Args:
+            lines_ready_to_render (list[str], optional): _description_. Defaults to [""].
+        """
         self.image.fill((colors_dict["black"]))
         line_number = 0
 
