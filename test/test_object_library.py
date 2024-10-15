@@ -15,6 +15,10 @@ class TestObjectLibrary:
         assert id1 == 1
         assert id2 == 2
 
+        object_library.next_ID = 1
+        with pytest.raises(ValueError):
+            id3 = object_library.get_ID()
+
     def test_get_used_IDs(self, object_library):
         object_library.get_ID()
         object_library.get_ID()

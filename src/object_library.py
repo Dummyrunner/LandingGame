@@ -15,11 +15,15 @@ class ObjectLibrary:
         """Adds a game object to the library."""
         if game_object.name in self.game_objects:
             raise ValueError("Object with this name already exists.")
+        if game_object.ID in self.used_IDs:
+            raise ValueError("Object with this ID already exists.")
         self.game_objects[game_object.name] = game_object
 
     def get_ID(self):
         """Returns a unique ID for an object."""
         self.next_ID += 1
+        if self.next_ID in self.used_IDs:
+            raise ValueError("ID already exists.")
         self.used_IDs.append(self.next_ID)
         return self.next_ID
 
