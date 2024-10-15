@@ -20,7 +20,7 @@ def create_pg_surface_from_color_and_size(color, size):
     return surf
 
 
-def create_overlays(ground, ego):
+def create_overlays(ground, ego, game_timing):
     debug_overlay = Overlay(
         create_pg_surface_from_color_and_size(
             colors_dict["black"], (CommonConstants.WINDOW_WIDTH / 3, 400)
@@ -53,7 +53,28 @@ def create_overlays(ground, ego):
     hud_overlay.add_line("Time as int:")
     hud_overlay.add_attribute(game_timing, "time", "Time: ", int)
 
-    return debug_overlay, hud_overlay
+    return [debug_overlay, hud_overlay]
+
+
+def process_keyboard_events(actions_while_key_pressed, actions_on_key_down):
+    for event in pygame.event.get():
+        if event.type == pygame.locals.QUIT:
+            pygame.quit()
+            sys.exit()
+        elif event.type == pygame.locals.KEYDOWN:
+            for action in actions_on_key_down:
+                if event.key == action.trigger_key.key_identifier:
+                    action.execute_action()
+
+    # check all key states and automatically perform all callbacks
+    key_press_state = pygame.key.get_pressed()
+    for action in actions_while_key_pressed:
+        trigger_action_given: bool = (
+            action.trigger_key.pressed
+            == key_press_state[action.trigger_key.key_identifier]
+        )
+        if trigger_action_given:
+            action.execute_action()
 
 
 def process_keyboard_events(actions_while_key_pressed, actions_on_key_down):
@@ -90,12 +111,13 @@ img_ego = create_pg_surface_from_color_and_size(
 img_ground = create_pg_surface_from_color_and_size(
     colors_dict["green"], (CommonConstants.WINDOW_WIDTH, 10)
 )
-img_key_indicator_pressed = create_pg_surface_from_color_and_size(
+
+img_key_indicator_while_pressed = create_pg_surface_from_color_and_size(
     colors_dict["cyan"], (20, 20)
 )
 
 key_indicator_while_pressed = LandingGameObject(
-    img_key_indicator_pressed,
+    img_key_indicator_while_pressed,
     Vec2d(CommonConstants.WINDOW_WIDTH - 50, CommonConstants.WINDOW_HEIGHT - 50),
 )
 img_key_indicator_on_down = create_pg_surface_from_color_and_size(
@@ -109,7 +131,7 @@ key_indicator_on_down = LandingGameObject(
 
 ego = Rocket(img_ego, rocket_pos, rocket_mass)
 ground = LandingGameObject(img_ground, ground_position)
-overlays = create_overlays(ground, ego)
+overlays = create_overlays(ground, ego, game_timing)
 
 # predefine actions on key: keypress-states connected to actions that will be performed if state is given
 color_key_indicator_blue_while_pressed = lambda: key_indicator_while_pressed.set_color(
@@ -126,6 +148,8 @@ color_key_indicator_cyan_on_down = lambda: key_indicator_on_down.set_color(
     colors_dict["cyan"]
 )
 
+toggle_overlay_visibility_on_down = lambda: overlays[0].toggle_visibility()
+
 act_change_box_color_while_spacebar_pressed = LandingGameActionOnKey(
     PygameKeyState(pygame.K_SPACE, True), color_key_indicator_blue_while_pressed
 )
@@ -135,6 +159,10 @@ act_change_box_color_while_spacebar_not_pressed = LandingGameActionOnKey(
 
 act_change_box_color_on_spacebar_down = LandingGameActionOnKey(
     PygameKeyState(pygame.K_SPACE, True), color_key_indicator_blue_on_down
+)
+
+act_toggle_overlay_visibility_on_v_down = LandingGameActionOnKey(
+    PygameKeyState(pygame.K_v, True), toggle_overlay_visibility_on_down
 )
 
 
@@ -151,7 +179,10 @@ actions_while_key_pressed = [
     act_change_box_color_while_spacebar_pressed,
     act_change_box_color_while_spacebar_not_pressed,
 ]
-actions_on_key_down = [act_change_box_color_on_spacebar_down]
+actions_on_key_down = [
+    act_change_box_color_on_spacebar_down,
+    act_toggle_overlay_visibility_on_v_down,
+]
 
 while True:
     process_keyboard_events(actions_while_key_pressed, actions_on_key_down)
