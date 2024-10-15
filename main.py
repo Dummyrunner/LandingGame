@@ -23,6 +23,7 @@ def create_pg_surface_from_color_and_size(color, size):
 
 def create_overlays(ground, ego, game_timing):
     debug_overlay = Overlay(
+        "debug_overlay",
         create_pg_surface_from_color_and_size(
             colors_dict["black"], (CommonConstants.WINDOW_WIDTH / 3, 400)
         ),
@@ -42,6 +43,7 @@ def create_overlays(ground, ego, game_timing):
     debug_overlay.add_attribute(ego.kinematic, "acceleration", "Acceleration: ", None)
 
     hud_overlay = Overlay(
+        "hud_overlay",
         create_pg_surface_from_color_and_size(
             colors_dict["black"], (CommonConstants.WINDOW_WIDTH - 20, 80)
         ),
@@ -123,6 +125,7 @@ def main():
     )
 
     key_indicator_while_pressed = LandingGameObject(
+        "key_indicator_while_pressed",
         img_key_indicator_while_pressed,
         Vec2d(CommonConstants.WINDOW_WIDTH - 50, CommonConstants.WINDOW_HEIGHT - 50),
     )
@@ -131,6 +134,7 @@ def main():
     )
 
     key_indicator_on_down = LandingGameObject(
+        "key_indicator_on_down",
         img_key_indicator_on_down,
         Vec2d(CommonConstants.WINDOW_WIDTH - 100, CommonConstants.WINDOW_HEIGHT - 50),
     )

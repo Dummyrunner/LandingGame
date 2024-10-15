@@ -26,6 +26,7 @@ class TestRocket:
 
     def test_init(self, example_image):
         Rocket(
+            name="test_rocket",
             image=example_image,
             pos=self.position,
             mass=self.mass,
@@ -33,12 +34,14 @@ class TestRocket:
             acceleration=self.acceleration,
         )
         Rocket(
+            name="test_rocket",
             image=example_image,
             pos=self.position,
             mass=self.mass,
             velocity=self.velocity,
         )
         Rocket(
+            name="test_rocket",
             image=example_image,
             pos=self.position,
             mass=self.mass,
@@ -54,6 +57,7 @@ class TestRocket:
         expected_new_velocity_meter = self.velocity + time_step * self.acceleration
 
         obj = Rocket(
+            name="test_rocket",
             image=example_image,
             pos=self.position,
             mass=self.mass,

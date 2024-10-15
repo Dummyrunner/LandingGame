@@ -27,6 +27,7 @@ class TestLinearPhysicalObject:
 
     def test_init(self, example_image):
         obj = LinearPhysicalObject(
+            name="test_object",
             image=example_image,
             pos=self.position_pixel,
             mass=self.mass,
@@ -34,12 +35,14 @@ class TestLinearPhysicalObject:
             acceleration=self.acceleration,
         )
         obj = LinearPhysicalObject(
+            name="test_object",
             image=example_image,
             pos=self.position_pixel,
             mass=self.mass,
             velocity=self.velocity,
         )
         obj = LinearPhysicalObject(
+            name="test_object",
             image=example_image,
             pos=self.position_pixel,
             mass=self.mass,
@@ -55,6 +58,7 @@ class TestLinearPhysicalObject:
         expected_new_velocity_meter = self.velocity + time_step * self.acceleration
 
         obj = LinearPhysicalObject(
+            name="test_object",
             image=example_image,
             pos=self.position_pixel,
             mass=self.mass,
