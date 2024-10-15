@@ -2,7 +2,7 @@ import pygame
 
 from src.common_constants import Opacity
 from src.vec2d import Vec2d
-from src.object_identifier import ObjectIdentifier
+from src.object_library import ObjectIdentifier
 
 
 class LandingGameObject(pygame.sprite.Sprite):
