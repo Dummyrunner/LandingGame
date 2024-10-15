@@ -12,6 +12,7 @@ from src.common_constants import CommonConstants, GameFonts, Opacity
 from src.overlay import Overlay
 from src.game_timing import GameTiming
 from src.landing_game_action_on_key import PygameKeyState, LandingGameActionOnKey
+from src.object_identifier import ObjectIdentifier
 
 
 def create_pg_surface_from_color_and_size(color, size):
@@ -102,6 +103,8 @@ def main():
     pygame.init()
     game_window = GameWindow("Landing Game")
     game_timing = GameTiming()
+    game_object_identifier = ObjectIdentifier()
+
     rocket_pos = Vec2d(
         CommonConstants.WINDOW_WIDTH / 2, CommonConstants.WINDOW_HEIGHT / 2
     )
@@ -132,8 +135,8 @@ def main():
         Vec2d(CommonConstants.WINDOW_WIDTH - 100, CommonConstants.WINDOW_HEIGHT - 50),
     )
 
-    ego = Rocket(img_ego, rocket_pos, rocket_mass)
-    ground = LandingGameObject(img_ground, ground_position)
+    ego = Rocket("ego", img_ego, rocket_pos, rocket_mass)
+    ground = LandingGameObject("ground", img_ground, ground_position)
     overlays = create_overlays(ground, ego, game_timing)
 
     # predefine actions on key: keypress-states connected to actions that will be performed if state is given

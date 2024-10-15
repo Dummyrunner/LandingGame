@@ -2,6 +2,7 @@ import pygame
 
 from src.common_constants import Opacity
 from src.vec2d import Vec2d
+from src.object_identifier import ObjectIdentifier
 
 
 class LandingGameObject(pygame.sprite.Sprite):
@@ -9,10 +10,13 @@ class LandingGameObject(pygame.sprite.Sprite):
 
     def __init__(
         self,
+        name: str,
         image: pygame.surface,
         pos_pixel: Vec2d = Vec2d(),
     ) -> None:
         super().__init__()
+        self.ID = ObjectIdentifier().get_ID()
+        self.name = name
         self.rect: pygame.Rect = pygame.Surface.get_rect(image)
         self.rect.center = Vec2d(pos_pixel)
         self.add_pos_to_dict()
