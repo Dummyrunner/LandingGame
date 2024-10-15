@@ -80,32 +80,11 @@ def process_keyboard_events(actions_while_key_pressed, actions_on_key_down):
             action.execute_action()
 
 
-def process_keyboard_events(actions_while_key_pressed, actions_on_key_down):
-    for event in pygame.event.get():
-        if event.type == pygame.locals.QUIT:
-            pygame.quit()
-            sys.exit()
-        elif event.type == pygame.locals.KEYDOWN:
-            for action in actions_on_key_down:
-                if event.key == action.trigger_key.key_identifier:
-                    action.execute_action()
-
-    # check all key states and automatically perform all callbacks
-    key_press_state = pygame.key.get_pressed()
-    for action in actions_while_key_pressed:
-        trigger_action_given: bool = (
-            action.trigger_key.pressed
-            == key_press_state[action.trigger_key.key_identifier]
-        )
-        if trigger_action_given:
-            action.execute_action()
-
-
 def main():
     pygame.init()
     game_window = GameWindow("Landing Game")
     game_timing = GameTiming()
-    game_object_library = ObjectLibrary()
+    object_library = ObjectLibrary()
 
     rocket_pos = Vec2d(
         CommonConstants.WINDOW_WIDTH / 2, CommonConstants.WINDOW_HEIGHT / 2
@@ -175,13 +154,12 @@ def main():
         PygameKeyState(pygame.K_v, True), toggle_overlay_visibility_on_down
     )
 
-    obj_list = pygame.sprite.Group()
-    obj_list.add(key_indicator_while_pressed)
-    obj_list.add(key_indicator_on_down)
-    obj_list.add(ego)
-    obj_list.add(ground)
+    object_library.add_game_object(key_indicator_while_pressed)
+    object_library.add_game_object(key_indicator_on_down)
+    object_library.add_game_object(ego)
+    object_library.add_game_object(ground)
     for overlay in overlays:
-        obj_list.add(overlay)
+        object_library.add_game_object(overlay)
 
     # bundle all keystate -> action correlations into one list
     actions_while_key_pressed = [
@@ -196,9 +174,8 @@ def main():
     while True:
         process_keyboard_events(actions_while_key_pressed, actions_on_key_down)
         game_window.erase_screen()
-        for i, obj in enumerate(obj_list):
-            obj.update(CommonConstants.TIME_STEP)
-            game_window.display.blit(obj.image, obj.rect)
+        object_library.update(CommonConstants.TIME_STEP)
+        object_library.blit(game_window.display)
         game_timing.update(CommonConstants.TIME_STEP)
         pygame.display.update()
         game_window.clock.tick(game_window.fps)
