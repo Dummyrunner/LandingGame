@@ -33,11 +33,11 @@ def create_overlays(ground, ego, game_timing):
     )
     debug_overlay.add_line("Debug Information:")
     debug_overlay.add_line("")
-    debug_overlay.add_line("Ground")
+    debug_overlay.add_line(ground.name)
     debug_overlay.add_attribute(ground, "pos", "Altitude: ", None)
 
     debug_overlay.add_line("")
-    debug_overlay.add_line("Rocket")
+    debug_overlay.add_line(ego.name)
     debug_overlay.add_attribute(ego, "pos", "Position: ", None)
     debug_overlay.add_attribute(ego.kinematic, "velocity", "Velocity: ", None)
     debug_overlay.add_attribute(ego.kinematic, "acceleration", "Acceleration: ", None)
@@ -56,7 +56,7 @@ def create_overlays(ground, ego, game_timing):
     hud_overlay.add_line("Time as int:")
     hud_overlay.add_attribute(game_timing, "time", "Time: ", int)
 
-    return [debug_overlay, hud_overlay]
+    return {debug_overlay.name: debug_overlay, hud_overlay.name: hud_overlay}
 
 
 def process_keyboard_events(actions_while_key_pressed, actions_on_key_down):
@@ -180,7 +180,7 @@ def main():
     obj_list.add(key_indicator_on_down)
     obj_list.add(ego)
     obj_list.add(ground)
-    for overlay in overlays:
+    for overlay in overlays.values():
         obj_list.add(overlay)
 
     # bundle all keystate -> action correlations into one list

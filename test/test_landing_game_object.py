@@ -21,6 +21,7 @@ class TestLandingGameObject:
             "test_object", image=example_image, pos_pixel=position_pixel
         )
 
+        assert obj.ID is not None
         assert obj.name == "test_object"
         assert obj.pos == position_pixel
         assert obj.rect.width == example_image.get_width()
