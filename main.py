@@ -77,27 +77,6 @@ def process_keyboard_events(actions_while_key_pressed, actions_on_key_down):
             action.execute_action()
 
 
-def process_keyboard_events(actions_while_key_pressed, actions_on_key_down):
-    for event in pygame.event.get():
-        if event.type == pygame.locals.QUIT:
-            pygame.quit()
-            sys.exit()
-        elif event.type == pygame.locals.KEYDOWN:
-            for action in actions_on_key_down:
-                if event.key == action.trigger_key.key_identifier:
-                    action.execute_action()
-
-    # check all key states and automatically perform all callbacks
-    key_press_state = pygame.key.get_pressed()
-    for action in actions_while_key_pressed:
-        trigger_action_given: bool = (
-            action.trigger_key.pressed
-            == key_press_state[action.trigger_key.key_identifier]
-        )
-        if trigger_action_given:
-            action.execute_action()
-
-
 pygame.init()
 game_window = GameWindow("Landing Game")
 game_timing = GameTiming()
@@ -187,6 +166,7 @@ actions_on_key_down = [
 while True:
     process_keyboard_events(actions_while_key_pressed, actions_on_key_down)
     game_window.erase_screen()
+    ego.external_forces.append(Vec2d(0, CommonConstants.GRAVITATIONAL_FORCE_EARTH))
     for i, obj in enumerate(obj_list):
         obj.update(CommonConstants.TIME_STEP)
         game_window.display.blit(obj.image, obj.rect)
