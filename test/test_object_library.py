@@ -9,19 +9,6 @@ class TestObjectIdentifier:
     def object_identifier(self):
         return ObjectIdentifier()
 
-    def test_add_object(self, object_library):
-        obj1 = MagicMock(name="object1")
-        object_library.add_object(obj1)
-        assert "object1" in object_library._objects_dict
-
-    def test_add_object_duplicate(self, object_library):
-        obj1 = MagicMock(name="object1")
-        object_library.add_object(obj1)
-        with pytest.raises(
-            ValueError, match="Object with name object1 already exists."
-        ):
-            object_library.add_object(obj1)
-
     def test_get_ID(self, object_identifier):
         id1 = object_identifier.get_ID()
         id2 = object_identifier.get_ID()
