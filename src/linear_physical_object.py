@@ -8,6 +8,7 @@ from src.general_physics import meter_to_pixel, pixel_to_meter
 class LinearPhysicalObject(LandingGameObject, LinearKinematic):
     def __init__(
         self,
+        name: str,
         image: pygame.surface,
         pos: Vec2d,
         mass: float,
@@ -15,7 +16,7 @@ class LinearPhysicalObject(LandingGameObject, LinearKinematic):
         acceleration: Vec2d = Vec2d(),
     ):
 
-        LandingGameObject.__init__(self, image, pos)
+        LandingGameObject.__init__(self, name, image, pos)
         self.kinematic = LinearKinematic(mass, velocity, acceleration)
 
     def step(self, time_step_width: float) -> None:

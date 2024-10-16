@@ -9,7 +9,7 @@ def overlay():
     pygame.init()
     image = pygame.Surface((200, 100))
     font = pygame.font.Font(None, 36)
-    return Overlay(image, font)
+    return Overlay("test_overlay", image, font)
 
 
 def test_overlay_initialization(overlay):

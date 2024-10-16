@@ -6,10 +6,13 @@ from src.linear_physical_object import LinearPhysicalObject
 class Rocket(LinearPhysicalObject):
     def __init__(
         self,
+        name: str,
         image: pygame.surface,
         pos: Vec2d,
         mass: float,
         velocity: Vec2d = Vec2d(),
         acceleration: Vec2d = Vec2d(),
     ):
-        LinearPhysicalObject.__init__(self, image, pos, mass, velocity, acceleration)
+        LinearPhysicalObject.__init__(
+            self, name, image, pos, mass, velocity, acceleration
+        )

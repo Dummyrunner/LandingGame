@@ -17,8 +17,12 @@ class TestLandingGameObject:
 
     def test_initialization(self, example_image):
         position_pixel = Vec2d(100, 90)
-        obj = LandingGameObject(image=example_image, pos_pixel=position_pixel)
+        obj = LandingGameObject(
+            "test_object", image=example_image, pos_pixel=position_pixel
+        )
 
+        assert obj.ID is not None
+        assert obj.name == "test_object"
         assert obj.pos == position_pixel
         assert obj.rect.width == example_image.get_width()
         assert obj.rect.height == example_image.get_height()
