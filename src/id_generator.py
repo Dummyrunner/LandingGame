@@ -1,7 +1,7 @@
 class IDGenerator:
     def __init__(self):
-        current_id = 0
+        self.current_id = 0
 
-    def assign_ID():
-        yield current_id
-        current_id += 1
+    def assign_ID(self):
+        self.current_id += 1
+        return self.current_id
