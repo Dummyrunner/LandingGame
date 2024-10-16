@@ -2,10 +2,13 @@ import pygame
 
 from src.common_constants import Opacity
 from src.vec2d import Vec2d
+from src.id_generator import IDGenerator
 
 
 class LandingGameObject(pygame.sprite.Sprite):
     """Object that takes sprite representation, dimensions, position and stores according rect"""
+
+    ID_generator = IDGenerator()
 
     def __init__(
         self,
@@ -13,6 +16,7 @@ class LandingGameObject(pygame.sprite.Sprite):
         pos_pixel: Vec2d = Vec2d(),
     ) -> None:
         super().__init__()
+        self.ID = self.ID_generator.assign_ID()
         self.rect: pygame.Rect = pygame.Surface.get_rect(image)
         self.rect.center = Vec2d(pos_pixel)
         self.add_pos_to_dict()

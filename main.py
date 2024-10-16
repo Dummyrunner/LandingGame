@@ -32,13 +32,15 @@ def create_overlays(ground, ego, game_timing):
     debug_overlay.add_line("Debug Information:")
     debug_overlay.add_line("")
     debug_overlay.add_line("Ground")
-    debug_overlay.add_attribute(ground, "pos", "Altitude: ", None)
+    debug_overlay.add_attribute(ground, "ID", "ID", int)
+    debug_overlay.add_attribute(ground, "pos", "Altitude", None)
 
     debug_overlay.add_line("")
     debug_overlay.add_line("Rocket")
-    debug_overlay.add_attribute(ego, "pos", "Position: ", None)
-    debug_overlay.add_attribute(ego.kinematic, "velocity", "Velocity: ", None)
-    debug_overlay.add_attribute(ego.kinematic, "acceleration", "Acceleration: ", None)
+    debug_overlay.add_attribute(ego, "ID", "ID", int)
+    debug_overlay.add_attribute(ego, "pos", "Position", None)
+    debug_overlay.add_attribute(ego.kinematic, "velocity", "Velocity", None)
+    debug_overlay.add_attribute(ego.kinematic, "acceleration", "Acceleration", None)
 
     hud_overlay = Overlay(
         create_pg_surface_from_color_and_size(
@@ -48,10 +50,7 @@ def create_overlays(ground, ego, game_timing):
         (10, CommonConstants.WINDOW_HEIGHT - 90),
         Opacity.SEMI_TRANSPARENT,
     )
-    hud_overlay.add_line("Time as float with 2 decimal places:")
-    hud_overlay.add_attribute(game_timing, "time", "Time: ", float)
-    hud_overlay.add_line("Time as int:")
-    hud_overlay.add_attribute(game_timing, "time", "Time: ", int)
+    hud_overlay.add_attribute(game_timing, "time", "Time", float)
 
     return [debug_overlay, hud_overlay]
 
