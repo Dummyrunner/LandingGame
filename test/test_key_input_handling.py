@@ -61,6 +61,7 @@ def test_key_input_pressed_handling(keys_down_list, expected_color):
     )
 
     key_indicator_while_pressed = LandingGameObject(
+        "key_indicator_while_pressed",
         img_key_indicator_while_pressed,
         Vec2d(CommonConstants.WINDOW_WIDTH - 50, CommonConstants.WINDOW_HEIGHT - 50),
     )
