@@ -140,14 +140,16 @@ class Overlay(LandingGameObject):
         Returns:
             str: _description_
         """
-        if attribute_format_as == float:
-            return (
-                f"{attribute_display_name}: {float(obj.__dict__[attribute_name]):.2f}"
-            )
-        elif attribute_format_as == int:
-            return f"{attribute_display_name}: {int(obj.__dict__[attribute_name])}"
-        elif attribute_format_as == str:
-            return f"{attribute_display_name}: {str(obj.__dict__[attribute_name])}"
+        # print(locals())
+        return "DUMMY_INFO"
+        # if attribute_format_as == float:
+        #     return (
+        #         f"{attribute_display_name}: {float(obj.__dict__[attribute_name]):.2f}"
+        #     )
+        # elif attribute_format_as == int:
+        #     return f"{attribute_display_name}: {int(obj.__dict__[attribute_name])}"
+        # elif attribute_format_as == str:
+        #     return f"{attribute_display_name}: {str(obj.__dict__[attribute_name])}"
 
     def __get_line_from_object(
         self, obj, attribute_name, attribute_display_name, attribute_format_as

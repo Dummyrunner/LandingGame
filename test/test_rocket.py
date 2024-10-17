@@ -27,20 +27,20 @@ class TestRocket:
     def test_init(self, example_image):
         Rocket(
             image=example_image,
-            pos=self.position,
+            pos_pixel=self.position,
             mass=self.mass,
             velocity=self.velocity,
             acceleration=self.acceleration,
         )
         Rocket(
             image=example_image,
-            pos=self.position,
+            pos_pixel=self.position,
             mass=self.mass,
             velocity=self.velocity,
         )
         Rocket(
             image=example_image,
-            pos=self.position,
+            pos_pixel=self.position,
             mass=self.mass,
         )
 
@@ -55,11 +55,12 @@ class TestRocket:
 
         obj = Rocket(
             image=example_image,
-            pos=self.position,
+            pos_pixel=self.position,
             mass=self.mass,
             velocity=self.velocity,
             acceleration=self.acceleration,
         )
+        obj.external_forces = [obj.kinematic.mass * self.acceleration]
         obj.step(time_step)
         assert obj.pos == meter_to_pixel(expected_new_position_meter)
         assert obj.kinematic.velocity == expected_new_velocity_meter
