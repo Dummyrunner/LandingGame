@@ -81,7 +81,7 @@ pygame.init()
 game_window = GameWindow("Landing Game")
 game_timing = GameTiming()
 rocket_pos = Vec2d(CommonConstants.WINDOW_WIDTH / 2, CommonConstants.WINDOW_HEIGHT / 2)
-rocket_mass = 1e5
+rocket_mass = CommonConstants.ROCKET_MASS
 ground_position = Vec2d(CommonConstants.WINDOW_WIDTH / 2, 500)
 img_ego = create_pg_surface_from_color_and_size(
     colors_dict["red"],
@@ -129,6 +129,10 @@ color_key_indicator_cyan_on_down = lambda: key_indicator_on_down.set_color(
 
 toggle_overlay_visibility_on_down = lambda: overlays[0].toggle_visibility()
 
+activate_ego_upwards_boost = lambda: ego.external_forces.append(
+    CommonConstants.ROCKET_MASS * Vec2d(0, -20)
+)
+
 act_change_box_color_while_spacebar_pressed = LandingGameActionOnKey(
     PygameKeyState(pygame.K_SPACE, True), color_key_indicator_blue_while_pressed
 )
@@ -144,6 +148,9 @@ act_toggle_overlay_visibility_on_v_down = LandingGameActionOnKey(
     PygameKeyState(pygame.K_v, True), toggle_overlay_visibility_on_down
 )
 
+act_boost_ego_up_on_upwards_key = LandingGameActionOnKey(
+    PygameKeyState(pygame.K_UP, True), activate_ego_upwards_boost
+)
 
 obj_list = pygame.sprite.Group()
 obj_list.add(key_indicator_while_pressed)
@@ -157,6 +164,7 @@ for overlay in overlays:
 actions_while_key_pressed = [
     act_change_box_color_while_spacebar_pressed,
     act_change_box_color_while_spacebar_not_pressed,
+    act_boost_ego_up_on_upwards_key,
 ]
 actions_on_key_down = [
     act_change_box_color_on_spacebar_down,
@@ -166,7 +174,10 @@ actions_on_key_down = [
 while True:
     process_keyboard_events(actions_while_key_pressed, actions_on_key_down)
     game_window.erase_screen()
-    ego.external_forces.append(Vec2d(0, CommonConstants.GRAVITATIONAL_FORCE_EARTH))
+    ego.external_forces.append(
+        CommonConstants.ROCKET_MASS
+        * Vec2d(0, CommonConstants.GRAVITATIONAL_FORCE_EARTH)
+    )
     for i, obj in enumerate(obj_list):
         obj.update(CommonConstants.TIME_STEP)
         game_window.display.blit(obj.image, obj.rect)
