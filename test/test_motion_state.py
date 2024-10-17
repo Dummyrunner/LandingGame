@@ -31,20 +31,20 @@ class TestMotionState:
         )
 
     def test_set_acceleration(self):
-        acceleration_to_assign = Vec2d(111, 222)
+        external_forces_to_assign = [Vec2d(111, 222)]
         obj = MotionState(
             pos_meter=example_pos_meter_vector,
             mass=5.0,
-            acceleration=acceleration_to_assign,
+            external_forces=external_forces_to_assign,
         )
-        assert obj.acceleration == acceleration_to_assign
-        acceleration_too_large = Vec2d(1e9, 10)
+        assert obj.external_forces == external_forces_to_assign
+        external_forces_to_large = [Vec2d(1e9, 10)]
         obj_too_accelerated_saturate = MotionState(
             pos_meter=example_pos_meter_vector,
             mass=5.0,
             velocity=Vec2d(),
-            acceleration=acceleration_too_large,
+            external_forces=external_forces_to_large,
         )
-        assert obj_too_accelerated_saturate.acceleration.length == pytest.approx(
-            PhysicalBoundaries.MAX_SPEED, ABS_TOLERANCE
-        )
+        assert sum(
+            obj_too_accelerated_saturate.external_forces
+        ).length == pytest.approx(PhysicalBoundaries.MAX_SPEED, ABS_TOLERANCE)

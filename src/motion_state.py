@@ -8,14 +8,14 @@ class MotionState:
         pos_meter,
         mass: float = 0,
         velocity: Vec2d = Vec2d(),
-        acceleration: Vec2d = Vec2d(),
+        external_forces: list = [Vec2d()],
     ):
         if mass < 0:
             raise ValueError(f"Negative mass assigned! mass = {mass}")
         self._mass = mass
         self._pos_meter_precise = pos_meter
         self._velocity = velocity
-        self._acceleration = acceleration
+        self._external_forces = external_forces
 
     @property
     def pos_meter_precise(self) -> Vec2d:
@@ -36,18 +36,6 @@ class MotionState:
         self._velocity = vel
 
     @property
-    def acceleration(self):
-        return self._acceleration
-
-    @acceleration.setter
-    def acceleration(self, value: Vec2d) -> None:
-        if value.length > PhysicalBoundaries.MAX_ACCELERATION:
-            normalized_value = value.normalized()
-            self._acceleration = PhysicalBoundaries.MAX_ACCELERATION * normalized_value
-        else:
-            self._acceleration = value
-
-    @property
     def mass(self):
         return self._mass
 
@@ -56,3 +44,17 @@ class MotionState:
         if value < 0:
             raise ValueError(f"Negative mass assigned! mass = {value}")
         self._mass = value
+
+    @property
+    def external_forces(self) -> Vec2d:
+        return self._external_forces
+
+    @external_forces.setter
+    def external_forces(self, forces: Vec2d):
+        if type(forces) != list:
+            raise TypeError(
+                "External forces has to be a list of Vec2d, but is {type(forces)}"
+            )
+        if sum(forces).length > PhysicalBoundaries.MAX_ACCELERATION * self.mass:
+            forces = PhysicalBoundaries.MAX_SPEED * sum(forces).normalized()
+        self._external_forces = forces
