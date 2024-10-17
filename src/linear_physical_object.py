@@ -1,22 +1,31 @@
 import pygame
 from src.vec2d import Vec2d
-from src.linear_kinematic import LinearKinematic
+from src.motion_state import MotionState
 from src.landing_game_object import LandingGameObject
 from src.general_physics import meter_to_pixel, pixel_to_meter
 
 
-class LinearPhysicalObject(LandingGameObject, LinearKinematic):
+def round_vec2d_meter_to_pixel(floatvec: Vec2d) -> Vec2d:
+    x = meter_to_pixel(floatvec[0])
+    y = meter_to_pixel(floatvec[1])
+    return Vec2d(round(x), round(y))
+
+
+class LinearPhysicalObject(LandingGameObject, MotionState):
     def __init__(
         self,
         image: pygame.surface,
-        pos: Vec2d,
+        pos_pixel: Vec2d,
         mass: float,
         velocity: Vec2d = Vec2d(),
         acceleration: Vec2d = Vec2d(),
     ):
 
-        LandingGameObject.__init__(self, image, pos)
-        self.kinematic = LinearKinematic(mass, velocity, acceleration)
+        LandingGameObject.__init__(self, image, pos_pixel)
+        self.kinematic = MotionState(
+            pixel_to_meter(pos_pixel), mass, velocity, acceleration
+        )
+        self.external_forces = [Vec2d()]
 
     def step(self, time_step_width: float) -> None:
         """Perform timestep: update position and velocity
@@ -25,20 +34,25 @@ class LinearPhysicalObject(LandingGameObject, LinearKinematic):
         Args:
             time_step_width (float): len of timestep that should be simulated
         """
+        if self.external_forces == []:
+            self.external_forces = [Vec2d()]
+        resulting_external_force = sum(self.external_forces)
+        new_acceleration = +(1 / self.kinematic.mass) * resulting_external_force
         if time_step_width < 0:
             raise ValueError(
                 f"Negative time {time_step_width} handed to LinearPhysicalObject.step. Only positive time admissible!"
             )
         new_pos_meter = Vec2d(
-            pixel_to_meter(self.pos) + time_step_width * self.kinematic.velocity
+            self.kinematic.pos_meter_precise + time_step_width * self.kinematic.velocity
         )
-        new_pos_pixel = meter_to_pixel(new_pos_meter)
-        new_velocity = (
-            self.kinematic.velocity + time_step_width * self.kinematic.acceleration
-        )
-        self.set_pos(new_pos_pixel)
-        self.kinematic.set_velocity(new_velocity)
+        self.kinematic.pos_meter_precise = new_pos_meter
+        new_velocity = self.kinematic.velocity + time_step_width * new_acceleration
+        self.kinematic.velocity = new_velocity
+
+        self.pos = meter_to_pixel(new_pos_meter)
+
+        self.external_forces = [Vec2d()]
 
     def update(self, time_step):
         self.step(time_step)
-        self.rect.center = self.pos
+        self.rect.center = round_vec2d_meter_to_pixel(self.kinematic.pos_meter_precise)

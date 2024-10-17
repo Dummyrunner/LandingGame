@@ -5,7 +5,7 @@ from src.colors import colors_dict
 from src.linear_physical_object import LinearPhysicalObject
 from src.dimensions2d import Dimensions2D
 from src.vec2d import Vec2d
-from src.general_physics import pixel_to_meter, meter_to_pixel
+from src.general_physics import meter_to_pixel
 
 
 @pytest.fixture
@@ -28,20 +28,20 @@ class TestLinearPhysicalObject:
     def test_init(self, example_image):
         obj = LinearPhysicalObject(
             image=example_image,
-            pos=self.position_pixel,
+            pos_pixel=self.position_pixel,
             mass=self.mass,
             velocity=self.velocity,
             acceleration=self.acceleration,
         )
         obj = LinearPhysicalObject(
             image=example_image,
-            pos=self.position_pixel,
+            pos_pixel=self.position_pixel,
             mass=self.mass,
             velocity=self.velocity,
         )
         obj = LinearPhysicalObject(
             image=example_image,
-            pos=self.position_pixel,
+            pos_pixel=self.position_pixel,
             mass=self.mass,
         )
 
@@ -49,18 +49,16 @@ class TestLinearPhysicalObject:
         time_step = 0.1
         non_admissible_time_step = -0.1
 
-        expected_new_position_meter = (
-            pixel_to_meter(self.position_pixel) + time_step * self.velocity
-        )
+        expected_new_position_meter = self.position_meter + time_step * self.velocity
         expected_new_velocity_meter = self.velocity + time_step * self.acceleration
-
         obj = LinearPhysicalObject(
             image=example_image,
-            pos=self.position_pixel,
+            pos_pixel=self.position_pixel,
             mass=self.mass,
             velocity=self.velocity,
-            acceleration=self.acceleration,
+            acceleration=Vec2d(),
         )
+        obj.external_forces = [self.acceleration * obj.kinematic.mass]
         obj.step(time_step)
         assert obj.pos == meter_to_pixel(expected_new_position_meter)
         assert obj.kinematic.velocity == expected_new_velocity_meter
