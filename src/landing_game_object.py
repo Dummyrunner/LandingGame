@@ -29,6 +29,10 @@ class LandingGameObject(pygame.sprite.Sprite):
     def pos(self) -> Vec2d:
         return Vec2d(self.rect.center)
 
+    @pos.setter
+    def pos(self, new_pos):
+        self.rect.center = new_pos
+
     def set_pos(self, pos_pixel: Vec2d) -> None:
         """set position in pixel standard coordinate system
 
