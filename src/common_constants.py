@@ -5,10 +5,11 @@ from dataclasses import dataclass
 @dataclass(frozen=True)
 class CommonConstants:
     GRAVITATIONAL_FORCE_EARTH: float = 9.81  # m/s^2
-    TIME_STEP: float = 0.01  # seconds
+    ROCKET_MASS = 1e5  # kg
     METER_TO_PIXEL: float = float(10)
     PIXEL_TO_METER: float = 1 / METER_TO_PIXEL
     FPS: int = 60
+    TIME_STEP: float = 1 / FPS  # seconds
     WINDOW_WIDTH: int = 800
     WINDOW_HEIGHT: int = 600
 
