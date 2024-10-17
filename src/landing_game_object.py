@@ -10,11 +10,17 @@ class LandingGameObject(pygame.sprite.Sprite):
     def __init__(
         self,
         image: pygame.surface,
-        pos_pixel: Vec2d = Vec2d(),
+        pos: Vec2d = Vec2d(),
     ) -> None:
+        """LandingGameObject constructor.
+
+        Args:
+            image (pygame.surface): pygame.surface that defines the object's visual representation
+            pos (Vec2d, optional): 2d Position in pixel. (0,0) represents left top corner. Defaults to Vec2d().
+        """
         super().__init__()
         self.rect: pygame.Rect = pygame.Surface.get_rect(image)
-        self.rect.center = Vec2d(pos_pixel)
+        self.rect.center = Vec2d(pos)
         self.add_pos_to_dict()
         self.image = image
 
