@@ -129,27 +129,28 @@ class Overlay(LandingGameObject):
     def __format_line(
         self, obj, attribute_name, attribute_display_name, attribute_format_as
     ) -> str:
-        """Format the attribute line by creating a string from display name and object data
+        """Format the attribute line by creating a string from display name and object data. Returns a "name not found" string,
+        if attribute_name is not an attribute of obj.
 
         Args:
-            obj (_type_): object to print info about within this overlay
-            attribute_name (_type_)
-            attribute_display_name (_type_)
-            attribute_format_as (_type_)
+            obj: object to print info about within this overlay
+            attribute_name (str)
+            attribute_display_name (str)
+            attribute_format_as (type (float, int, str))
 
         Returns:
-            str: _description_
+            str: Attribute display name and value
         """
-        # print(locals())
-        return "DUMMY_INFO"
-        # if attribute_format_as == float:
-        #     return (
-        #         f"{attribute_display_name}: {float(obj.__dict__[attribute_name]):.2f}"
-        #     )
-        # elif attribute_format_as == int:
-        #     return f"{attribute_display_name}: {int(obj.__dict__[attribute_name])}"
-        # elif attribute_format_as == str:
-        #     return f"{attribute_display_name}: {str(obj.__dict__[attribute_name])}"
+        if not attribute_name in obj.__dict__:
+            return f"Ovrl. Err.: attribute {attribute_name} not found"
+        if attribute_format_as == float:
+            return (
+                f"{attribute_display_name}: {float(obj.__dict__[attribute_name]):.2f}"
+            )
+        elif attribute_format_as == int:
+            return f"{attribute_display_name}: {int(obj.__dict__[attribute_name])}"
+        elif attribute_format_as == str:
+            return f"{attribute_display_name}: {str(obj.__dict__[attribute_name])}"
 
     def __get_line_from_object(
         self, obj, attribute_name, attribute_display_name, attribute_format_as
