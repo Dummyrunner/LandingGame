@@ -45,6 +45,8 @@ class MotionState:
 
     @property
     def external_forces(self) -> list[Vec2d]:
+        if self._external_forces == []:
+            self._external_forces = [Vec2d()]
         return self._external_forces
 
     @external_forces.setter
