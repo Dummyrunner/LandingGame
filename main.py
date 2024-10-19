@@ -133,7 +133,7 @@ def main():
     toggle_overlay_visibility_on_down = lambda: overlays[0].toggle_visibility()
 
     activate_ego_upwards_boost = lambda: ego.kinematic.external_forces.append(
-        CommonConstants.ROCKET_MASS * Vec2d(0, -20)
+        CommonConstants.ROCKET_UPWARD_BOOST_FORCE_SCALAR * Vec2d(0, -1)
     )
 
     act_change_box_color_while_spacebar_pressed = LandingGameActionOnKey(
