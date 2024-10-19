@@ -13,4 +13,4 @@ class Rocket(LinearPhysicalObject):
         velocity: Vec2d = Vec2d(),
         external_forces: Vec2d = [Vec2d()],
     ):
-        LinearPhysicalObject.__init__(self, image, pos, mass, velocity, external_forces)
+        LinearPhysicalObject.__init__(self, image, pos, mass, velocity, acceleration)
