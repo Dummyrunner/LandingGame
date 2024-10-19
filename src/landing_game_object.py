@@ -53,3 +53,7 @@ class LandingGameObject(pygame.sprite.Sprite):
     @name.setter
     def name(self, name: str) -> None:
         self._name = name
+
+    def __del__(self):
+        self.ID_generator.used_ids.remove(self.ID)
+        del self
