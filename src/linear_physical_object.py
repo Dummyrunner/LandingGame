@@ -32,8 +32,6 @@ class LinearPhysicalObject(LandingGameObject, MotionState):
         Args:
             time_step_width (float): len of timestep that should be simulated
         """
-        if self.kinematic.external_forces == []:
-            self.kinematic.external_forces = [Vec2d()]
         resulting_external_force = sum(self.kinematic.external_forces)
         acceleration = +(1 / self.kinematic.mass) * resulting_external_force
 
@@ -47,10 +45,8 @@ class LinearPhysicalObject(LandingGameObject, MotionState):
         self.kinematic.pos_meter_precise = new_pos_meter
         new_velocity = self.kinematic.velocity + time_step_width * acceleration
         self.kinematic.velocity = new_velocity
-
         self.pos = meter_to_pixel(new_pos_meter)
-
-        self.kinematic.external_forces = [Vec2d()]
+        self.kinematic.external_forces = []
 
     def update(self, time_step):
         self.step(time_step)
