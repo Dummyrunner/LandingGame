@@ -23,7 +23,7 @@ class LandingGameObject(pygame.sprite.Sprite):
         """
         super().__init__()
         self.ID = self.ID_generator.assign_ID()
-        self.name: str = None
+        self._name: str = None
         self.rect: pygame.Rect = pygame.Surface.get_rect(image)
         self.rect.center = Vec2d(pos)
         self.add_pos_to_dict()
@@ -62,4 +62,4 @@ class LandingGameObject(pygame.sprite.Sprite):
 
     @name.setter
     def name(self, name: str) -> None:
-        self.name = name
+        self._name = name
