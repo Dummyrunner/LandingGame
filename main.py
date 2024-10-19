@@ -111,9 +111,7 @@ def main():
     )
 
     ego = Rocket(img_ego, rocket_pos, rocket_mass)
-    ego.name = "Rocket"
     ground = LandingGameObject(img_ground, ground_position)
-    ground.name = "Ground"
     overlays = create_overlays(ground, ego, game_timing)
 
     # predefine actions on key: keypress-states connected to actions that will be performed if state is given

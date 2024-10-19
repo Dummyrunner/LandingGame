@@ -8,7 +8,7 @@ from src.id_generator import IDGenerator
 class LandingGameObject(pygame.sprite.Sprite):
     """Object that takes sprite representation, dimensions, position and stores according rect"""
 
-    ID_generator = IDGenerator()
+    id_generator = IDGenerator()
 
     def __init__(
         self,
@@ -22,8 +22,7 @@ class LandingGameObject(pygame.sprite.Sprite):
             pos (Vec2d, optional): 2d Position in pixel. (0,0) represents left top corner. Defaults to Vec2d().
         """
         super().__init__()
-        self.ID = self.ID_generator.assign_ID()
-        self._name: str = None
+        self.id = self.id_generator.assign_id()
         self.rect: pygame.Rect = pygame.Surface.get_rect(image)
         self.rect.center = Vec2d(pos)
         self.add_pos_to_dict()
@@ -56,14 +55,6 @@ class LandingGameObject(pygame.sprite.Sprite):
     def add_pos_to_dict(self):
         self.__dict__.update({"pos": self.pos})
 
-    @property
-    def name(self) -> str:
-        return self._name
-
-    @name.setter
-    def name(self, name: str) -> None:
-        self._name = name
-
     def __del__(self):
-        self.ID_generator.used_ids.remove(self.ID)
+        self.id_generator.used_ids.remove(self.id)
         del self
