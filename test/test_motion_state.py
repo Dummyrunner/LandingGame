@@ -22,7 +22,7 @@ class TestMotionState:
             pos_meter=example_pos_meter_vector, mass=5.0, velocity=velocity_to_assign
         )
         assert obj.velocity == velocity_to_assign
-        velocity_too_large = Vec2d(1e9, 10)
+        velocity_too_large = Vec2d(PhysicalBoundaries.MAX_SPEED + 1, 10)
         obj_too_fast_saturate = MotionState(
             pos_meter=example_pos_meter_vector, mass=5.0, velocity=velocity_too_large
         )
@@ -30,21 +30,24 @@ class TestMotionState:
             PhysicalBoundaries.MAX_SPEED, ABS_TOLERANCE
         )
 
-    def test_set_acceleration(self):
+    def test_set_external_forces(self):
         external_forces_to_assign = [Vec2d(111, 222)]
         obj = MotionState(
             pos_meter=example_pos_meter_vector,
             mass=5.0,
             external_forces=external_forces_to_assign,
         )
+        with pytest.raises(TypeError):
+            non_vector_object = 123
+            obj.external_forces = non_vector_object
         assert obj.external_forces == external_forces_to_assign
-        external_forces_to_large = [Vec2d(1e9, 10)]
-        obj_too_accelerated_saturate = MotionState(
+
+    def test_set_external_forces_single_vector(self):
+        external_forces_to_assign_vector = Vec2d(111, 222)
+        obj = MotionState(
             pos_meter=example_pos_meter_vector,
             mass=5.0,
-            velocity=Vec2d(),
-            external_forces=external_forces_to_large,
+            external_forces=external_forces_to_assign_vector,
         )
-        assert sum(
-            obj_too_accelerated_saturate.external_forces
-        ).length == pytest.approx(PhysicalBoundaries.MAX_SPEED, ABS_TOLERANCE)
+        assert type(obj.external_forces) == list
+        assert obj.external_forces == [external_forces_to_assign_vector]
