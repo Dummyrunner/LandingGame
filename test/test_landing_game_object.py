@@ -35,6 +35,6 @@ class TestLandingGameObject:
 
     def test_delete(self, example_image):
         obj = LandingGameObject(image=example_image, pos=Vec2d(100, 90))
-        id = obj.ID
+        id = obj.id
         del obj
-        assert id not in LandingGameObject.ID_generator.used_ids
+        assert id not in LandingGameObject.id_generator.used_ids
