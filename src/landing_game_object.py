@@ -44,3 +44,7 @@ class LandingGameObject(pygame.sprite.Sprite):
 
     def add_pos_to_dict(self):
         self.__dict__.update({"pos": self.pos})
+
+    def __del__(self):
+        self.ID_generator.used_ids.remove(self.ID)
+        del self

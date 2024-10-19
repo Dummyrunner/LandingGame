@@ -6,6 +6,7 @@ from src.rocket import Rocket
 from src.dimensions2d import Dimensions2D
 from src.vec2d import Vec2d
 from src.general_physics import pixel_to_meter, meter_to_pixel
+from src.landing_game_object import LandingGameObject
 
 
 @pytest.fixture

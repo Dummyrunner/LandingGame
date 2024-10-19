@@ -5,6 +5,8 @@ class IDGenerator:
 
     def assign_ID(self):
         self.current_id += 1
+        while self.current_id in self.used_ids:
+            self.current_id += 1
         self.used_ids.append(self.current_id)
         return self.current_id
 

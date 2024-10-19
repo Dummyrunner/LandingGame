@@ -5,7 +5,6 @@ from src.landing_game_object import LandingGameObject
 
 
 class Rocket(LinearPhysicalObject):
-
     def __init__(
         self,
         image: pygame.surface,
