@@ -48,7 +48,7 @@ class LandingGameObject(pygame.sprite.Sprite):
 
     @property
     def name(self) -> str:
-        return self.name
+        return self._name
 
     @name.setter
     def name(self, name: str) -> None:
