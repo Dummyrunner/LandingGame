@@ -2,8 +2,8 @@ import pygame
 
 
 class IDSCOPE:
-    def __init__(self):
-        self.object_list = pygame.sprite.Group()
+    def __init__(self, object_list=[]):
+        self.object_list = object_list
         self.name_to_id = self.create_standard_ids()
 
     def create_standard_ids(self):
@@ -14,7 +14,11 @@ class IDSCOPE:
         }
 
     def name_object(self, obj, name):
-        self.name_to_id[name] = self.id
+        if name in self.name_to_id:
+            raise ValueError(f"Name {name} already in use!")
+        if obj.id in self.name_to_id.values():
+            raise ValueError(f"Object already has a name!")
+        self.name_to_id[name] = obj.id
 
     def get_id(self, name: str = None):
         if name is None:

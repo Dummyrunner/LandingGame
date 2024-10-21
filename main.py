@@ -84,8 +84,8 @@ def main():
 
     game_window = GameWindow("Landing Game")
     game_timing = GameTiming()
-    id_scope = IDSCOPE()
-    object_list = id_scope.object_list
+    object_list = pygame.sprite.Group()
+    id_scope = IDSCOPE(object_list)
 
     rocket_pos = Vec2d(
         CommonConstants.WINDOW_WIDTH / 2, CommonConstants.WINDOW_HEIGHT / 2
