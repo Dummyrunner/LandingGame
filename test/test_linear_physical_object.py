@@ -7,6 +7,7 @@ from src.dimensions2d import Dimensions2D
 from src.vec2d import Vec2d
 from src.general_physics import meter_to_pixel
 from src.common_constants import CommonConstants
+from src.id_scope import IDSCOPE
 
 
 @pytest.fixture
@@ -19,6 +20,7 @@ def example_image():
 class TestLinearPhysicalObject:
     @pytest.fixture(autouse=True)
     def setup(self):
+        self.id_scope = IDSCOPE()
         self.dimensions = Dimensions2D(4, 8)
         self.position_meter = Vec2d(10, 50)
         self.position_pixel = meter_to_pixel(Vec2d(self.position_meter))
@@ -30,6 +32,7 @@ class TestLinearPhysicalObject:
 
     def test_init(self, example_image):
         _ = LinearPhysicalObject(
+            self.id_scope.get_id(),
             image=example_image,
             pos=self.position_pixel,
             mass=self.mass,
@@ -37,12 +40,14 @@ class TestLinearPhysicalObject:
             external_forces=self.external_forces,
         )
         _ = LinearPhysicalObject(
+            self.id_scope.get_id(),
             image=example_image,
             pos=self.position_pixel,
             mass=self.mass,
             velocity=self.velocity,
         )
         _ = LinearPhysicalObject(
+            self.id_scope.get_id(),
             image=example_image,
             pos=self.position_pixel,
             mass=self.mass,
@@ -58,6 +63,7 @@ class TestLinearPhysicalObject:
 
         # When
         obj = LinearPhysicalObject(
+            self.id_scope.get_id(),
             image=example_image,
             pos=self.position_pixel,
             mass=self.mass,
