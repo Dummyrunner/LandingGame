@@ -14,13 +14,14 @@ def round_vec2d_meter_to_pixel(floatvec: Vec2d) -> Vec2d:
 class LinearPhysicalObject(LandingGameObject, MotionState):
     def __init__(
         self,
+        id: int,
         image: pygame.surface,
         pos: Vec2d,
         mass: float,
         velocity: Vec2d = Vec2d(),
         external_forces: list = [Vec2d()],
     ):
-        LandingGameObject.__init__(self, image, pos)
+        LandingGameObject.__init__(self, id, image, pos)
         self.kinematic = MotionState(
             pixel_to_meter(pos), mass, velocity, external_forces
         )

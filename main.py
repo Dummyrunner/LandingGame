@@ -12,6 +12,7 @@ from src.common_constants import CommonConstants, GameFonts, Opacity
 from src.overlay import Overlay
 from src.game_timing import GameTiming
 from src.landing_game_action_on_key import PygameKeyState, LandingGameActionOnKey
+from src.id_scope import IDSCOPE
 
 
 def create_pg_surface_from_color_and_size(color, size):
@@ -20,8 +21,9 @@ def create_pg_surface_from_color_and_size(color, size):
     return surf
 
 
-def create_overlays(ground, ego, game_timing):
+def create_overlays(ground, ego, id_scope, game_timing):
     debug_overlay = Overlay(
+        id_scope.get_id(),
         create_pg_surface_from_color_and_size(
             colors_dict["black"], (CommonConstants.WINDOW_WIDTH / 3, 400)
         ),
@@ -43,6 +45,7 @@ def create_overlays(ground, ego, game_timing):
     debug_overlay.add_attribute(ego.kinematic, "acceleration", "Acceleration", None)
 
     hud_overlay = Overlay(
+        id_scope.get_id(),
         create_pg_surface_from_color_and_size(
             colors_dict["black"], (CommonConstants.WINDOW_WIDTH - 20, 80)
         ),
@@ -78,8 +81,12 @@ def process_keyboard_events(actions_while_key_pressed, actions_on_key_down):
 
 def main():
     pygame.init()
+
     game_window = GameWindow("Landing Game")
     game_timing = GameTiming()
+    id_scope = IDSCOPE()
+    object_list = id_scope.object_list
+
     rocket_pos = Vec2d(
         CommonConstants.WINDOW_WIDTH / 2, CommonConstants.WINDOW_HEIGHT / 2
     )
@@ -98,6 +105,7 @@ def main():
     )
 
     key_indicator_while_pressed = LandingGameObject(
+        id_scope.get_id(),
         img_key_indicator_while_pressed,
         Vec2d(CommonConstants.WINDOW_WIDTH - 50, CommonConstants.WINDOW_HEIGHT - 50),
     )
@@ -106,13 +114,18 @@ def main():
     )
 
     key_indicator_on_down = LandingGameObject(
+        id_scope.get_id(),
         img_key_indicator_on_down,
         Vec2d(CommonConstants.WINDOW_WIDTH - 100, CommonConstants.WINDOW_HEIGHT - 50),
     )
 
-    ego = Rocket(img_ego, rocket_pos, rocket_mass)
-    ground = LandingGameObject(img_ground, ground_position)
-    overlays = create_overlays(ground, ego, game_timing)
+    ego = Rocket(id_scope.get_id("ego"), img_ego, rocket_pos, rocket_mass)
+    object_list.add(ego)
+    ground = LandingGameObject(id_scope.get_id("ground"), img_ground, ground_position)
+    object_list.add(ground)
+    overlays = create_overlays(ground, ego, id_scope, game_timing)
+    for overlay in overlays:
+        object_list.add(overlay)
 
     # predefine actions on key: keypress-states connected to actions that will be performed if state is given
     color_key_indicator_blue_while_pressed = (
@@ -154,14 +167,6 @@ def main():
         PygameKeyState(pygame.K_UP, True), activate_ego_upwards_boost
     )
 
-    obj_list = pygame.sprite.Group()
-    obj_list.add(key_indicator_while_pressed)
-    obj_list.add(key_indicator_on_down)
-    obj_list.add(ego)
-    obj_list.add(ground)
-    for overlay in overlays:
-        obj_list.add(overlay)
-
     # bundle all keystate -> action correlations into one list
     actions_while_key_pressed = [
         act_change_box_color_while_spacebar_pressed,
@@ -173,6 +178,8 @@ def main():
         act_toggle_overlay_visibility_on_v_down,
     ]
 
+    print(f"Initial object list: {object_list}")
+
     while True:
         process_keyboard_events(actions_while_key_pressed, actions_on_key_down)
         game_window.erase_screen()
@@ -180,7 +187,7 @@ def main():
             CommonConstants.ROCKET_MASS
             * Vec2d(0, CommonConstants.GRAVITATIONAL_FORCE_EARTH)
         )
-        for i, obj in enumerate(obj_list):
+        for i, obj in enumerate(object_list):
             obj.update(CommonConstants.TIME_STEP)
             game_window.display.blit(obj.image, obj.rect)
         game_timing.update(CommonConstants.TIME_STEP)

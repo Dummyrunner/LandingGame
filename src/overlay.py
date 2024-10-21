@@ -20,12 +20,13 @@ class Overlay(LandingGameObject):
 
     def __init__(
         self,
+        id: int,
         image: pygame.Surface,
         font: pygame.font.Font,
         position=(0, 0),
         alpha: int = Opacity.SEMI_TRANSPARENT,
     ):
-        super().__init__(image, position)
+        super().__init__(id, image, position)
         if not pygame.get_init():
             pygame.init()
         self.original_alpha = alpha

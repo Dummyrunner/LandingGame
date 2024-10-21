@@ -7,11 +7,13 @@ from src.landing_game_object import LandingGameObject
 class Rocket(LinearPhysicalObject):
     def __init__(
         self,
+        id: int,
         image: pygame.surface,
         pos: Vec2d,
         mass: float,
         velocity: Vec2d = Vec2d(),
         external_forces: Vec2d = [Vec2d()],
     ):
-        LinearPhysicalObject.__init__(self, image, pos, mass, velocity, external_forces)
-        self.id = self.id_generator.assign_rocket_ID()
+        LinearPhysicalObject.__init__(
+            self, id, image, pos, mass, velocity, external_forces
+        )
