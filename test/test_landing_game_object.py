@@ -23,3 +23,9 @@ class TestLandingGameObject:
         assert obj.rect.width == example_image.get_width()
         assert obj.rect.height == example_image.get_height()
         assert obj.rect.center == (position_pixel.x, position_pixel.y)
+
+    def test_delete(self, example_image):
+        obj = LandingGameObject(image=example_image, pos=Vec2d(100, 90))
+        id = obj.id
+        del obj
+        assert id not in LandingGameObject.id_generator.used_ids
