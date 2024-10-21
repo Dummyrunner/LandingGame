@@ -13,14 +13,14 @@ class TestIDGenerator:
         assert isinstance(self.id_generator.current_id, int)
 
     def test_generate_id(self):
-        id1 = self.id_generator.assign_id()
-        id2 = self.id_generator.assign_id()
+        id1 = self.id_generator.allocate_id()
+        id2 = self.id_generator.allocate_id()
         assert id1 != id2, "IDs should be unique"
         assert isinstance(id1, int), "ID should be a integer"
         assert isinstance(id2, int), "ID should be a integer"
 
         self.id_generator.next_id = id2
-        id3 = self.id_generator.assign_id()
+        id3 = self.id_generator.allocate_id()
         assert id3 != id2, "IDs should be unique"
 
     def test_generate_rocket_id(self):

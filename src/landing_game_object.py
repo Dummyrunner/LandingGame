@@ -22,7 +22,7 @@ class LandingGameObject(pygame.sprite.Sprite):
             pos (Vec2d, optional): 2d Position in pixel. (0,0) represents left top corner. Defaults to Vec2d().
         """
         super().__init__()
-        self.id = self.id_generator.assign_id()
+        self.id = self.id_generator.allocate_id()
         self.rect: pygame.Rect = pygame.Surface.get_rect(image)
         self.rect.center = Vec2d(pos)
         self.add_pos_to_dict()

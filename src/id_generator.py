@@ -3,7 +3,7 @@ class IDGenerator:
         self.current_id = 0
         self.used_ids = []
 
-    def assign_id(self):
+    def allocate_id(self):
         self.current_id += 1
         while self.current_id in self.used_ids:
             self.current_id += 1
