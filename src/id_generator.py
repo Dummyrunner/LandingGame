@@ -16,3 +16,6 @@ class IDGenerator:
         else:
             self.used_ids.append(0)
             return 0
+
+    def remove_id(self, id):
+        self.used_ids.remove(id)
