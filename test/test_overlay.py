@@ -2,16 +2,14 @@ import pytest
 import pygame
 from src.overlay import Overlay
 from src.landing_game_object import LandingGameObject
-from src.id_scope import IDSCOPE
 
 
 @pytest.fixture
 def overlay():
     pygame.init()
-    id_scope = IDSCOPE()
     image = pygame.Surface((200, 100))
     font = pygame.font.Font(None, 36)
-    return Overlay(id_scope.get_id(), image, font)
+    return Overlay(0, image, font)
 
 
 def test_overlay_initialization(overlay):

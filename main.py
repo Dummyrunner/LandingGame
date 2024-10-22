@@ -23,7 +23,7 @@ def create_pg_surface_from_color_and_size(color, size):
 
 def create_overlays(ground, ego, id_scope, game_timing):
     debug_overlay = Overlay(
-        id_scope.get_id(),
+        id_scope.create_id(),
         create_pg_surface_from_color_and_size(
             colors_dict["black"], (CommonConstants.WINDOW_WIDTH / 3, 400)
         ),
@@ -45,7 +45,7 @@ def create_overlays(ground, ego, id_scope, game_timing):
     debug_overlay.add_attribute(ego.kinematic, "acceleration", "Acceleration", None)
 
     hud_overlay = Overlay(
-        id_scope.get_id(),
+        id_scope.create_id(),
         create_pg_surface_from_color_and_size(
             colors_dict["black"], (CommonConstants.WINDOW_WIDTH - 20, 80)
         ),
@@ -86,6 +86,13 @@ def main():
     game_timing = GameTiming()
     object_list = pygame.sprite.Group()
     id_scope = IDSCOPE(object_list)
+    id_scope.set_standard_ids(
+        {
+            "ego": 0,
+            "ground": 1,
+            "platform": 2,
+        }
+    )
 
     rocket_pos = Vec2d(
         CommonConstants.WINDOW_WIDTH / 2, CommonConstants.WINDOW_HEIGHT / 2
@@ -105,7 +112,7 @@ def main():
     )
 
     key_indicator_while_pressed = LandingGameObject(
-        id_scope.get_id(),
+        id_scope.create_id(),
         img_key_indicator_while_pressed,
         Vec2d(CommonConstants.WINDOW_WIDTH - 50, CommonConstants.WINDOW_HEIGHT - 50),
     )
@@ -114,14 +121,16 @@ def main():
     )
 
     key_indicator_on_down = LandingGameObject(
-        id_scope.get_id(),
+        id_scope.create_id(),
         img_key_indicator_on_down,
         Vec2d(CommonConstants.WINDOW_WIDTH - 100, CommonConstants.WINDOW_HEIGHT - 50),
     )
 
-    ego = Rocket(id_scope.get_id("ego"), img_ego, rocket_pos, rocket_mass)
+    ego = Rocket(id_scope.create_id("ego"), img_ego, rocket_pos, rocket_mass)
     object_list.add(ego)
-    ground = LandingGameObject(id_scope.get_id("ground"), img_ground, ground_position)
+    ground = LandingGameObject(
+        id_scope.create_id("ground"), img_ground, ground_position
+    )
     object_list.add(ground)
     overlays = create_overlays(ground, ego, id_scope, game_timing)
     for overlay in overlays:
@@ -178,8 +187,6 @@ def main():
         act_toggle_overlay_visibility_on_v_down,
     ]
 
-    print(f"Initial object list: {object_list}")
-
     while True:
         process_keyboard_events(actions_while_key_pressed, actions_on_key_down)
         game_window.erase_screen()
@@ -187,7 +194,7 @@ def main():
             CommonConstants.ROCKET_MASS
             * Vec2d(0, CommonConstants.GRAVITATIONAL_FORCE_EARTH)
         )
-        for i, obj in enumerate(object_list):
+        for obj in object_list:
             obj.update(CommonConstants.TIME_STEP)
             game_window.display.blit(obj.image, obj.rect)
         game_timing.update(CommonConstants.TIME_STEP)

@@ -4,7 +4,6 @@ import pytest
 from src.landing_game_object import LandingGameObject
 from src.vec2d import Vec2d
 from src.colors import colors_dict
-from src.id_scope import IDSCOPE
 
 
 @pytest.fixture
@@ -17,11 +16,8 @@ def example_image():
 class TestLandingGameObject:
 
     def test_initialization(self, example_image):
-        id_scope = IDSCOPE()
         position_pixel = Vec2d(100, 90)
-        obj = LandingGameObject(
-            id_scope.get_id(), image=example_image, pos=position_pixel
-        )
+        obj = LandingGameObject(0, image=example_image, pos=position_pixel)
 
         assert obj.pos == position_pixel
         assert obj.rect.width == example_image.get_width()

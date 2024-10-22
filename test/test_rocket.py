@@ -27,11 +27,10 @@ class TestRocket:
         self.acceleration = Vec2d(-10, 2)
         self.external_forces = [self.acceleration * CommonConstants.ROCKET_MASS]
         self.mass = 1e5
-        self.id_scope = IDSCOPE()
 
     def test_init(self, example_image):
         Rocket(
-            self.id_scope.get_id(),
+            0,
             image=example_image,
             pos=self.position,
             mass=self.mass,
@@ -39,14 +38,14 @@ class TestRocket:
             external_forces=self.external_forces,
         )
         Rocket(
-            self.id_scope.get_id(),
+            0,
             image=example_image,
             pos=self.position,
             mass=self.mass,
             velocity=self.velocity,
         )
         Rocket(
-            self.id_scope.get_id(),
+            0,
             image=example_image,
             pos=self.position,
             mass=self.mass,
@@ -64,7 +63,7 @@ class TestRocket:
 
         # When
         obj = Rocket(
-            self.id_scope.get_id(),
+            0,
             image=example_image,
             pos=self.position,
             mass=self.mass,

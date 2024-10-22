@@ -8,7 +8,6 @@ from src.colors import colors_dict
 from src.common_constants import CommonConstants
 from src.game_timing import GameTiming
 from src.landing_game_action_on_key import PygameKeyState, LandingGameActionOnKey
-from src.id_scope import IDSCOPE
 
 
 def create_pg_surface_from_color_and_size(color, size):
@@ -56,14 +55,13 @@ def test_key_input_pressed_handling(keys_down_list, expected_color):
 
     game_window = GameWindow("Landing Game")
     game_timing = GameTiming()
-    id_scope = IDSCOPE()
 
     img_key_indicator_while_pressed = create_pg_surface_from_color_and_size(
         colors_dict["red"], (20, 20)
     )
 
     key_indicator_while_pressed = LandingGameObject(
-        id_scope.get_id(),
+        0,
         img_key_indicator_while_pressed,
         Vec2d(CommonConstants.WINDOW_WIDTH - 50, CommonConstants.WINDOW_HEIGHT - 50),
     )
