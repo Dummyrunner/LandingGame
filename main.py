@@ -126,14 +126,17 @@ def main():
     color_key_indicator_blue_on_down = lambda: key_indicator_on_down.set_color(
         colors_dict["blue"]
     )
-    color_key_indicator_cyan_on_down = lambda: key_indicator_on_down.set_color(
-        colors_dict["cyan"]
-    )
 
     toggle_overlay_visibility_on_down = lambda: overlays[0].toggle_visibility()
 
     activate_ego_upwards_boost = lambda: ego.kinematic.external_forces.append(
         CommonConstants.ROCKET_UPWARD_BOOST_FORCE_SCALAR * Vec2d(0, -1)
+    )
+    activate_left_engine_boost = lambda: ego.kinematic.external_forces.append(
+        CommonConstants.ROCKET_SIDEWAYS_BOOST_FORCE_SCALAR * Vec2d(-1, 0)
+    )
+    activate_right_engine_boost = lambda: ego.kinematic.external_forces.append(
+        CommonConstants.ROCKET_SIDEWAYS_BOOST_FORCE_SCALAR * Vec2d(1, 0)
     )
 
     act_change_box_color_while_spacebar_pressed = LandingGameActionOnKey(
@@ -154,6 +157,12 @@ def main():
     act_boost_ego_up_on_upwards_key = LandingGameActionOnKey(
         PygameKeyState(pygame.K_UP, True), activate_ego_upwards_boost
     )
+    act_boost_ego_left_on_left_key = LandingGameActionOnKey(
+        PygameKeyState(pygame.K_LEFT, True), activate_left_engine_boost
+    )
+    act_boost_ego_up_on_rigth_key = LandingGameActionOnKey(
+        PygameKeyState(pygame.K_RIGHT, True), activate_right_engine_boost
+    )
 
     obj_list = pygame.sprite.Group()
     obj_list.add(key_indicator_while_pressed)
@@ -168,6 +177,8 @@ def main():
         act_change_box_color_while_spacebar_pressed,
         act_change_box_color_while_spacebar_not_pressed,
         act_boost_ego_up_on_upwards_key,
+        act_boost_ego_left_on_left_key,
+        act_boost_ego_up_on_rigth_key,
     ]
     actions_on_key_down = [
         act_change_box_color_on_spacebar_down,
