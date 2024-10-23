@@ -7,6 +7,7 @@ class CommonConstants:
     GRAVITATIONAL_FORCE_EARTH: float = 9.81  # m/s^2
     ROCKET_MASS = 1e5  # kg
     ROCKET_UPWARD_BOOST_FORCE_SCALAR = ROCKET_MASS * 20
+    ROCKET_SIDEWAYS_BOOST_FORCE_SCALAR = ROCKET_MASS * 10
     METER_TO_PIXEL: float = float(10)
     PIXEL_TO_METER: float = 1 / METER_TO_PIXEL
     FPS: int = 60
