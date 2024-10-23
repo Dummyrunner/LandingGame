@@ -12,7 +12,7 @@ from src.common_constants import CommonConstants, GameFonts, Opacity
 from src.overlay import Overlay
 from src.game_timing import GameTiming
 from src.landing_game_action_on_key import PygameKeyState, LandingGameActionOnKey
-from src.id_scope import IDSCOPE
+from src.id_scope import IDScope
 
 
 def create_pg_surface_from_color_and_size(color, size):
@@ -85,8 +85,8 @@ def main():
     game_window = GameWindow("Landing Game")
     game_timing = GameTiming()
     object_list = pygame.sprite.Group()
-    id_scope = IDSCOPE(object_list)
-    id_scope.set_standard_ids(
+    id_scope = IDScope(object_list)
+    id_scope.set_reserved_ids(
         {
             "ego": 0,
             "ground": 1,

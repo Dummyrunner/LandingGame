@@ -1,7 +1,7 @@
 import pytest
 import pygame
 
-from src.id_scope import IDSCOPE
+from src.id_scope import IDScope
 from src.landing_game_object import LandingGameObject
 
 
@@ -26,7 +26,7 @@ class MockObject(pygame.sprite.Sprite):
 
 @pytest.fixture
 def scope():
-    return IDSCOPE(pygame.sprite.Group())
+    return IDScope(pygame.sprite.Group())
 
 
 def test_set_standard_ids(scope):
