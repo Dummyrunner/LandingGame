@@ -1,7 +1,7 @@
 import pytest
 import pygame
 
-from src.id_scope import IDSCOPE
+from src.id_scope import IDScope
 from src.landing_game_object import LandingGameObject
 
 
@@ -26,28 +26,28 @@ class MockObject(pygame.sprite.Sprite):
 
 @pytest.fixture
 def scope():
-    return IDSCOPE(pygame.sprite.Group())
+    return IDScope(pygame.sprite.Group())
 
 
-def test_set_standard_ids(scope):
-    standard_ids = {
+def test_set_reserved_ids(scope):
+    reserved_ids = {
         "ego": 0,
         "ground": 1,
         "platform": 2,
     }
-    scope.set_standard_ids(standard_ids)
-    assert scope.standard_ids == standard_ids
+    scope.set_reserved_ids(reserved_ids)
+    assert scope.reserved_ids == reserved_ids
 
 
-def test_set_standard_ids_already_set(scope):
-    standard_ids = {
+def test_set_reserved_ids_already_set(scope):
+    reserved_ids = {
         "ego": 0,
         "ground": 1,
         "platform": 2,
     }
-    scope.set_standard_ids(standard_ids)
+    scope.set_reserved_ids(reserved_ids)
     with pytest.raises(ValueError):
-        scope.set_standard_ids(standard_ids)
+        scope.set_reserved_ids(reserved_ids)
 
 
 def test_name_object_success(scope):
@@ -80,24 +80,24 @@ def test_create_id_without_name(scope):
 
 
 def test_create_id_with_name(scope):
-    standard_ids = {
+    reserved_ids = {
         "ego": 0,
         "ground": 1,
         "platform": 2,
     }
-    scope.set_standard_ids(standard_ids)
+    scope.set_reserved_ids(reserved_ids)
     assert scope.create_id("ego") == 0
     assert scope.create_id("ground") == 1
     assert scope.create_id("platform") == 2
 
 
 def test_create_id_with_nonexistent_name(scope):
-    standard_ids = {
+    reserved_ids = {
         "ego": 0,
         "ground": 1,
         "platform": 2,
     }
-    scope.set_standard_ids(standard_ids)
+    scope.set_reserved_ids(reserved_ids)
     with pytest.raises(KeyError):
         scope.create_id("nonexistent")
 

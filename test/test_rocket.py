@@ -8,7 +8,7 @@ from src.vec2d import Vec2d
 from src.general_physics import pixel_to_meter, meter_to_pixel
 from src.common_constants import CommonConstants
 from src.landing_game_object import LandingGameObject
-from src.id_scope import IDSCOPE
+from src.id_scope import IDScope
 
 
 @pytest.fixture

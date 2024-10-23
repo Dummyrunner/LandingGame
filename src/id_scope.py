@@ -3,17 +3,20 @@ import pygame
 from src.landing_game_object import LandingGameObject
 
 
-class IDSCOPE:
+class IDScope:
     def __init__(self, object_list: pygame.sprite.Group):
         self.object_list = object_list
-        self.standard_ids = {}
+        self.reserved_ids = {}
         self.name_to_id = {}
 
-    def set_standard_ids(self, standard_ids: dict):
+    def set_reserved_ids(self, standard_ids: dict):
         """Set the standard ids for the game"""
-        if len(self.standard_ids) > 0:
+        if len(self.reserved_ids) > 0:
             raise ValueError("Standard ids already set!")
-        self.standard_ids = standard_ids
+        for val in standard_ids.values():
+            if not isinstance(val, int) or val < 0:
+                raise ValueError("Standard ids must be non-negative integers!")
+        self.reserved_ids = standard_ids
 
     def name_object(self, obj: LandingGameObject, name: str):
         """Name an object by storing a name and the objects id in the name_to_id dictionary"""
@@ -27,14 +30,14 @@ class IDSCOPE:
         """Create a new id for an object or return"""
         if name is None:
             unavailable_ids = [o.id for o in self.object_list]
-            unavailable_ids += list(self.standard_ids.values())
+            unavailable_ids += list(self.reserved_ids.values())
             new_id = max(unavailable_ids) + 1
             return new_id
 
-        if name not in self.standard_ids:
+        if name not in self.reserved_ids:
             raise KeyError(f"Name {name} not found in name_to_id dictionary!")
 
-        return self.standard_ids[name]
+        return self.reserved_ids[name]
 
     def add_object(self, obj: LandingGameObject):
         if obj.id in [o.id for o in self.object_list]:
