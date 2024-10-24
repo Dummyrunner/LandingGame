@@ -22,7 +22,7 @@ def test_name_object(group, sprites):
     sprite1, _ = sprites
     group.add(sprite1)
     group.name_object("sprite1", sprite1)
-    assert group.get_object_by_name("sprite1") == sprite1
+    assert group.get_object_by_name("sprite1") is sprite1
 
 
 def test_name_object_not_in_group(group):
