@@ -1,5 +1,6 @@
 import pygame
 from dataclasses import dataclass
+from src.vec2d import Vec2d
 
 
 @dataclass(frozen=True)
@@ -9,6 +10,7 @@ class CommonConstants:
     ROCKET_UPWARD_BOOST_FORCE_SCALAR = ROCKET_MASS * 20
     METER_TO_PIXEL: float = float(10)
     PIXEL_TO_METER: float = 1 / METER_TO_PIXEL
+    EXHAUST_FIRE_DOWN_DIMENSIONS = Vec2d(10, 20)
     FPS: int = 60
     TIME_STEP: float = 1 / FPS  # seconds
     WINDOW_WIDTH: int = 800
