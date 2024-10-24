@@ -164,14 +164,6 @@ def main():
     for overlay in overlays:
         obj_list.add(overlay)
 
-    ################# For Dani to demonstrate #################
-    obj_list.name_object("ego", ego)
-    obj_list.name_object("ground", ground)
-
-    print(f"ego: {obj_list.get_object_by_name('ego')}")
-    print(f"egos id: {obj_list.get_object_by_name('ego').id}")
-    ################### Delete after Review ###################
-
     # bundle all keystate -> action correlations into one list
     actions_while_key_pressed = [
         act_change_box_color_while_spacebar_pressed,
