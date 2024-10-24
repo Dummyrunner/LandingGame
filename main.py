@@ -12,6 +12,7 @@ from src.common_constants import CommonConstants, GameFonts, Opacity
 from src.overlay import Overlay
 from src.game_timing import GameTiming
 from src.landing_game_action_on_key import PygameKeyState, LandingGameActionOnKey
+from src.landing_game_group import LandingGameGroup
 
 
 def create_pg_surface_from_color_and_size(color, size):
@@ -155,7 +156,7 @@ def main():
         PygameKeyState(pygame.K_UP, True), activate_ego_upwards_boost
     )
 
-    obj_list = pygame.sprite.Group()
+    obj_list = LandingGameGroup()
     obj_list.add(key_indicator_while_pressed)
     obj_list.add(key_indicator_on_down)
     obj_list.add(ego)
