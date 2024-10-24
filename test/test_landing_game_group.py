@@ -1,12 +1,12 @@
 import pytest
 import pygame
-from group import Group
+from src.landing_game_group import LandingGameGroup
 
 
 @pytest.fixture
 def group():
     pygame.init()
-    group = Group()
+    group = LandingGameGroup()
     yield group
     pygame.quit()
 
@@ -88,3 +88,34 @@ def test_clear_group(group, sprites):
         group.get_object_by_name("sprite1")
     with pytest.raises(KeyError):
         group.get_object_by_name("sprite2")
+
+
+def test_get_object_by_id(group, sprites):
+    sprite1, _ = sprites
+    sprite1.id = 1
+    group.add(sprite1)
+    assert group.get_object_by_id(1) == sprite1
+
+
+def test_get_object_by_id_not_found(group, sprites):
+    sprite1, _ = sprites
+    sprite1.id = 1
+    group.add(sprite1)
+    with pytest.raises(ValueError):
+        group.get_object_by_id(2)
+
+
+def test_remove_object_by_id(group, sprites):
+    sprite1, _ = sprites
+    sprite1.id = 1
+    group.add(sprite1)
+    group.remove_object_by_id(1)
+    assert sprite1 not in group
+
+
+def test_remove_object_by_id_not_found(group, sprites):
+    sprite1, _ = sprites
+    sprite1.id = 1
+    group.add(sprite1)
+    with pytest.raises(ValueError):
+        group.remove_object_by_id(2)
