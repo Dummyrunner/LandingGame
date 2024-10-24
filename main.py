@@ -97,6 +97,9 @@ def main():
     img_key_indicator_while_pressed = create_pg_surface_from_color_and_size(
         colors_dict["cyan"], (20, 20)
     )
+    img_engine_fire = create_pg_surface_from_color_and_size(
+        pygame.Color("orange"), CommonConstants.EXHAUST_FIRE_DOWN_DIMENSIONS
+    )
 
     key_indicator_while_pressed = LandingGameObject(
         img_key_indicator_while_pressed,
@@ -112,6 +115,15 @@ def main():
     )
 
     ego = Rocket(img_ego, rocket_pos, rocket_mass)
+    ego_engine_fire = LandingGameObject(
+        img_engine_fire,
+        pos=Vec2d(
+            ego.rect.midbottom[0],
+            ego.rect.midbottom[1]
+            + 0.5 * CommonConstants.EXHAUST_FIRE_DOWN_DIMENSIONS.y,
+        ),
+    )
+
     ground = LandingGameObject(img_ground, ground_position)
     overlays = create_overlays(ground, ego, game_timing)
 
@@ -136,6 +148,13 @@ def main():
         CommonConstants.ROCKET_UPWARD_BOOST_FORCE_SCALAR * Vec2d(0, -1)
     )
 
+    hide_engine_fire_up = lambda: ego_engine_fire.set_color(
+        pygame.Color("orange"), alpha=Opacity.TRANSPARENT
+    )
+    show_engine_fire_up = lambda: ego_engine_fire.set_color(
+        pygame.Color("orange"), alpha=Opacity.OPAQUE
+    )
+
     act_change_box_color_while_spacebar_pressed = LandingGameActionOnKey(
         PygameKeyState(pygame.K_SPACE, True), color_key_indicator_blue_while_pressed
     )
@@ -154,12 +173,20 @@ def main():
     act_boost_ego_up_on_upwards_key = LandingGameActionOnKey(
         PygameKeyState(pygame.K_UP, True), activate_ego_upwards_boost
     )
+    act_show_engine_fire_up_on_upwards_key = LandingGameActionOnKey(
+        PygameKeyState(pygame.K_UP, True), show_engine_fire_up
+    )
+
+    act_hide_engine_fire_up_on_upwards_key_not_pressed = LandingGameActionOnKey(
+        PygameKeyState(pygame.K_UP, False), hide_engine_fire_up
+    )
 
     obj_list = pygame.sprite.Group()
     obj_list.add(key_indicator_while_pressed)
     obj_list.add(key_indicator_on_down)
     obj_list.add(ego)
     obj_list.add(ground)
+    obj_list.add(ego_engine_fire)
     for overlay in overlays:
         obj_list.add(overlay)
 
@@ -168,6 +195,8 @@ def main():
         act_change_box_color_while_spacebar_pressed,
         act_change_box_color_while_spacebar_not_pressed,
         act_boost_ego_up_on_upwards_key,
+        act_show_engine_fire_up_on_upwards_key,
+        act_hide_engine_fire_up_on_upwards_key_not_pressed,
     ]
     actions_on_key_down = [
         act_change_box_color_on_spacebar_down,
@@ -177,6 +206,7 @@ def main():
     while True:
         process_keyboard_events(actions_while_key_pressed, actions_on_key_down)
         game_window.erase_screen()
+
         ego.kinematic.external_forces.append(
             CommonConstants.ROCKET_MASS
             * Vec2d(0, CommonConstants.GRAVITATIONAL_FORCE_EARTH)
@@ -184,6 +214,9 @@ def main():
         for i, obj in enumerate(obj_list):
             obj.update(CommonConstants.TIME_STEP)
             game_window.display.blit(obj.image, obj.rect)
+        ego_engine_fire.pos = Vec2d(
+            ego.rect.midbottom[0], ego.rect.midbottom[1] + 0.5 * 20
+        )
         game_timing.update(CommonConstants.TIME_STEP)
         pygame.display.update()
         game_window.clock.tick(game_window.fps)
