@@ -17,7 +17,7 @@ class LandingGameGroup(pygame.sprite.Group):
         return self.__name_to_object_dict[name]
 
     def remove_object_by_name(self, name: str):
-        del self.__name_to_object_dict[name]
+        self.remove(self.get_object_by_name(name))
 
     def get_object_by_id(self, id: int):
         for obj in self:
@@ -26,8 +26,7 @@ class LandingGameGroup(pygame.sprite.Group):
         raise ValueError("Object not found")
 
     def remove_object_by_id(self, id: int):
-        obj = self.get_object_by_id(id)
-        self.remove(obj)
+        self.remove(self.get_object_by_id(id))
 
     def remove(self, sprite):
         super().remove(sprite)
