@@ -1,5 +1,5 @@
-import pygame
 from dataclasses import dataclass
+from src.landing_game_action_periodic import LandingGameActionEachFrame
 
 
 def is_lambda(obj):
@@ -17,7 +17,7 @@ class PygameKeyState:
         self.pressed = pressed
 
 
-class LandingGameActionOnKey:
+class LandingGameActionOnKey(LandingGameActionEachFrame):
     """Defines the connection between a certain key state
     (e.g. "space bar is pressed" or "arrow key up is not pressed)
     and a callback function that will be executed under this condition"""
@@ -27,12 +27,5 @@ class LandingGameActionOnKey:
             raise TypeError(
                 f"trigger key state must be of type PygameKeyState, but is {type(trigger_key_state)}"
             )
-        if not is_lambda(action_callback):
-            raise TypeError(
-                f"action_callback must be of type function, but is of type {type(action_callback)}"
-            )
+        super().__init__(action_callback)
         self.trigger_key = trigger_key_state
-        self.action_callback = action_callback
-
-    def execute_action(self):
-        self.action_callback()

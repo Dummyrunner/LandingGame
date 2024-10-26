@@ -12,6 +12,7 @@ from src.common_constants import CommonConstants, GameFonts, Opacity
 from src.overlay import Overlay
 from src.game_timing import GameTiming
 from src.landing_game_action_on_key import PygameKeyState, LandingGameActionOnKey
+from src.landing_game_action_periodic import LandingGameActionEachFrame
 from src.landing_game_group import LandingGameGroup
 
 
@@ -78,6 +79,11 @@ def process_keyboard_events(actions_while_key_pressed, actions_on_key_down):
             action.execute_action()
 
 
+def process_each_frame_events(actions_each_frame):
+    for act in actions_each_frame:
+        act.execute_action()
+
+
 def main():
     pygame.init()
     game_window = GameWindow("Landing Game")
@@ -98,7 +104,9 @@ def main():
     img_key_indicator_while_pressed = create_pg_surface_from_color_and_size(
         colors_dict["cyan"], (20, 20)
     )
-
+    img_engine_fire = create_pg_surface_from_color_and_size(
+        pygame.Color("orange"), CommonConstants.EXHAUST_FIRE_DOWN_DIMENSIONS
+    )
     key_indicator_while_pressed = LandingGameObject(
         img_key_indicator_while_pressed,
         Vec2d(CommonConstants.WINDOW_WIDTH - 50, CommonConstants.WINDOW_HEIGHT - 50),
@@ -113,6 +121,14 @@ def main():
     )
 
     ego = Rocket(img_ego, rocket_pos, rocket_mass)
+    ego_engine_fire = LandingGameObject(
+        img_engine_fire,
+        pos=Vec2d(
+            ego.rect.midbottom[0],
+            ego.rect.midbottom[1]
+            + 0.5 * CommonConstants.EXHAUST_FIRE_DOWN_DIMENSIONS.y,
+        ),
+    )
     ground = LandingGameObject(img_ground, ground_position)
     overlays = create_overlays(ground, ego, game_timing)
 
@@ -133,6 +149,26 @@ def main():
     activate_ego_upwards_boost = lambda: ego.kinematic.external_forces.append(
         CommonConstants.ROCKET_UPWARD_BOOST_FORCE_SCALAR * Vec2d(0, -1)
     )
+
+    hide_engine_fire_up = lambda: ego_engine_fire.set_color(
+        pygame.Color("orange"),
+        alpha=Opacity.TRANSPARENT,
+    )
+    show_engine_fire_up = lambda: ego_engine_fire.set_color(
+        pygame.Color("orange"),
+        alpha=Opacity.OPAQUE,
+    )
+
+    glue_engine_fire_down_to_ego = lambda: setattr(
+        ego_engine_fire,
+        "pos",
+        Vec2d(
+            ego.rect.midbottom[0],
+            ego.rect.midbottom[1]
+            + 0.5 * CommonConstants.EXHAUST_FIRE_DOWN_DIMENSIONS.y,
+        ),
+    )
+
     activate_left_engine_boost = lambda: ego.kinematic.external_forces.append(
         CommonConstants.ROCKET_SIDEWAYS_BOOST_FORCE_SCALAR * Vec2d(-1, 0)
     )
@@ -165,13 +201,27 @@ def main():
         PygameKeyState(pygame.K_RIGHT, True), activate_right_engine_boost
     )
 
+    act_show_engine_fire_up_on_upwards_key = LandingGameActionOnKey(
+        PygameKeyState(pygame.K_UP, True), show_engine_fire_up
+    )
+
+    act_hide_engine_fire_up_on_upwards_key_not_pressed = LandingGameActionOnKey(
+        PygameKeyState(pygame.K_UP, False), hide_engine_fire_up
+    )
+
     obj_list = LandingGameGroup()
     obj_list.add(key_indicator_while_pressed)
     obj_list.add(key_indicator_on_down)
     obj_list.add(ego)
     obj_list.add(ground)
+    obj_list.add(ego_engine_fire)
+
     for overlay in overlays:
         obj_list.add(overlay)
+
+    act_glue_exhaust_flame_up_to_ego = LandingGameActionEachFrame(
+        glue_engine_fire_down_to_ego
+    )
 
     # bundle all keystate -> action correlations into one list
     actions_while_key_pressed = [
@@ -180,13 +230,18 @@ def main():
         act_boost_ego_up_on_upwards_key,
         act_boost_ego_left_on_left_key,
         act_boost_ego_up_on_rigth_key,
+        act_show_engine_fire_up_on_upwards_key,
+        act_hide_engine_fire_up_on_upwards_key_not_pressed,
     ]
     actions_on_key_down = [
         act_change_box_color_on_spacebar_down,
         act_toggle_overlay_visibility_on_v_down,
     ]
 
+    actions_each_frame = [act_glue_exhaust_flame_up_to_ego]
+
     while True:
+        process_each_frame_events(actions_each_frame)
         process_keyboard_events(actions_while_key_pressed, actions_on_key_down)
         game_window.erase_screen()
         ego.kinematic.external_forces.append(
