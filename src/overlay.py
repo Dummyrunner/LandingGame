@@ -66,20 +66,21 @@ class Overlay(LandingGameObject):
     ) -> None:
         """Add an attribute to the overlay. The attribute can be formatted as int, float, or str."""
 
-        if not hasattr(obj, attribute_name):
-            if isinstance(obj, LinearPhysicalObject) and not hasattr(
-                obj.kinematic, attribute_name
-            ):
-                self.line_order.append(
-                    f"Ovrl. Err.: attribute {attribute_name} not found"
+        if (
+            hasattr(obj, attribute_name)
+            or isinstance(obj, LinearPhysicalObject)
+            and hasattr(obj.kinematic, attribute_name)
+        ):
+            self.line_order.append(
+                (
+                    obj,
+                    attribute_name,
+                    attribute_display_name,
+                    attribute_format_as,
                 )
-                return
+            )
+        else:
             self.line_order.append(f"Ovrl. Err.: attribute {attribute_name} not found")
-            return
-
-        self.line_order.append(
-            (obj, attribute_name, attribute_display_name, attribute_format_as)
-        )
 
     def attach_to_object(self, obj: LandingGameObject) -> None:
         self.attached_object = obj
@@ -185,13 +186,16 @@ class Overlay(LandingGameObject):
         """
 
         display_value = self.__get_display_value_from_object(obj, attribute_name)
+        formated_value = None
 
         if attribute_format_as == float:
-            return f"{attribute_display_name}: {float(display_value):.2f}"
+            formated_value = round(display_value, 2)
         elif attribute_format_as == int:
-            return f"{attribute_display_name}: {int(display_value)}"
+            formated_value = int(display_value)
         elif attribute_format_as == str:
-            return f"{attribute_display_name}: {str(display_value)}"
+            formated_value = str(display_value)
+
+        return f"{attribute_display_name}: {formated_value}"
 
     def __get_line_from_object(
         self, obj, attribute_name, attribute_display_name, attribute_format_as
@@ -207,12 +211,7 @@ class Overlay(LandingGameObject):
         return formatted_line
 
     def __get_printlist(self) -> list:
-        """Get the list of lines to be printed.
-
-
-        Returns:
-            list: _description_
-        """
+        """Get the list of lines to be printed. Returns a list of strings to be printed on the overlay. If the line is a string, it is added to the list as is. If the line is a tuple, it is formatted as a string and added to the list."""
         print_list = []
         for line in self.line_order:
             if isinstance(line, str):
