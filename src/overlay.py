@@ -66,11 +66,7 @@ class Overlay(LandingGameObject):
     ) -> None:
         """Add an attribute to the overlay. The attribute can be formatted as int, float, or str."""
 
-        if (
-            hasattr(obj, attribute_name)
-            or isinstance(obj, LinearPhysicalObject)
-            and hasattr(obj.kinematic, attribute_name)
-        ):
+        if hasattr(obj, attribute_name):
             self.line_order.append(
                 (
                     obj,
@@ -147,10 +143,6 @@ class Overlay(LandingGameObject):
         display_value = None
         if hasattr(obj, attribute_name):
             display_value = getattr(obj, attribute_name)
-        elif isinstance(obj, LinearPhysicalObject) and hasattr(
-            obj.kinematic, attribute_name
-        ):
-            display_value = getattr(obj.kinematic, attribute_name)
         else:
             return f"Ovrl. Err.: attribute {attribute_name} not found"
 

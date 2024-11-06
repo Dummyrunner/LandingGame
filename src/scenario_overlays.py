@@ -51,7 +51,6 @@ class ScenarioOverlays:
                 break
         if game_timing is None:
             raise ValueError("GameTiming object not found in args")
-        hud_overlay.add_line("Time:")
         hud_overlay.add_attribute(game_timing, "time", "Time", float)
         overlays.append(hud_overlay)
 
