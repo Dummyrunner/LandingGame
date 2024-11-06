@@ -81,7 +81,10 @@ def test_add_attribute(overlay):
 
     obj = TestObject()
     overlay.add_attribute(obj, "speed", "Speed", float)
-    assert overlay.line_order == [(obj, "speed", "Speed", float)]
+    assert overlay.line_order[0] == (obj, "speed", "Speed", float)
+
+    overlay.add_attribute(obj, "force", "Force", float)
+    assert overlay.line_order[1] == "Ovrl. Err.: attribute force not found"
 
 
 def test_get_printlist(overlay):
@@ -150,3 +153,13 @@ def test_remove_first_line(overlay):
 
     overlay.remove_first_line()  # Should not raise an error even if the list is empty
     assert overlay.line_order == []
+
+
+def test_get_line_from_object(overlay):
+    class TestObject:
+        def __init__(self):
+            self.speed = 123.456
+
+    obj = TestObject()
+    line = overlay._Overlay__get_line_from_object(obj, "speed", "Speed", int)
+    assert line == "Speed: 123"

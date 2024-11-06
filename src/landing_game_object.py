@@ -25,7 +25,6 @@ class LandingGameObject(pygame.sprite.Sprite):
         self.__id = self.id_generator.generate_new_id()
         self.rect: pygame.Rect = pygame.Surface.get_rect(image)
         self.rect.center = Vec2d(pos)
-        self.add_pos_to_dict()
         self.image = image
 
     def update(self, *args) -> None:
@@ -50,10 +49,6 @@ class LandingGameObject(pygame.sprite.Sprite):
             pos_pixel (Vec2d): position in pixels
         """
         self.rect.center = Vec2d(pos_pixel)
-        self.add_pos_to_dict()
-
-    def add_pos_to_dict(self):
-        self.__dict__.update({"pos": self.pos})
 
     @property
     def id(self):

@@ -25,15 +25,15 @@ class ScenarioOverlays:
         debug_overlay.add_line("")
         debug_overlay.add_line("Ground")
         ground = object_list.get_object_by_name("ground")
-        debug_overlay.add_attribute(ground, "pos", "Altitude: ", None)
+        debug_overlay.add_attribute(ground, "pos", "Altitude", None)
 
         debug_overlay.add_line("")
         debug_overlay.add_line("Rocket")
         ego = object_list.get_object_by_name("ego")
-        debug_overlay.add_attribute(ego, "pos", "Position: ", None)
-        debug_overlay.add_attribute(ego.kinematic, "velocity", "Velocity: ", None)
+        debug_overlay.add_attribute(ego, "pos", "Position", None)
+        debug_overlay.add_attribute(ego.kinematic, "velocity", "Velocity", None)
         debug_overlay.add_attribute(
-            ego.kinematic, "acceleration", "Acceleration: ", None
+            ego.kinematic, "external_forces", "External Forces", None
         )
         overlays.append(debug_overlay)
 
@@ -51,8 +51,7 @@ class ScenarioOverlays:
                 break
         if game_timing is None:
             raise ValueError("GameTiming object not found in args")
-        hud_overlay.add_line("Time:")
-        hud_overlay.add_attribute(game_timing, "time", "Time: ", float)
+        hud_overlay.add_attribute(game_timing, "time", "Time", float)
         overlays.append(hud_overlay)
 
         return overlays
