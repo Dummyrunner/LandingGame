@@ -24,6 +24,7 @@ class LinearPhysicalObject(LandingGameObject, MotionState):
         self.kinematic = MotionState(
             pixel_to_meter(pos), mass, velocity, external_forces
         )
+        self.external_forces_last_frame: list = [Vec2d()]
 
     def step(self, time_step_width: float) -> None:
         """Perform timestep: update position and velocity
@@ -46,6 +47,7 @@ class LinearPhysicalObject(LandingGameObject, MotionState):
         new_velocity = self.kinematic.velocity + time_step_width * acceleration
         self.kinematic.velocity = new_velocity
         self.pos = meter_to_pixel(new_pos_meter)
+        self.external_forces_last_frame = self.kinematic.external_forces
         self.kinematic.external_forces = []
 
     def update(self, time_step):

@@ -15,7 +15,7 @@ class ScenarioOverlays:
         overlays = []
         debug_overlay = Overlay(
             create_pg_surface_from_color_and_size(
-                colors_dict["black"], (CommonConstants.WINDOW_WIDTH / 3, 400)
+                colors_dict["black"], (CommonConstants.WINDOW_WIDTH - 20, 400)
             ),
             GameFonts.BASIC_FONT,
             (10, 10),
@@ -33,7 +33,7 @@ class ScenarioOverlays:
         debug_overlay.add_attribute(ego, "pos", "Position", None)
         debug_overlay.add_attribute(ego.kinematic, "velocity", "Velocity", None)
         debug_overlay.add_attribute(
-            ego.kinematic, "external_forces", "External Forces", None
+            ego, "external_forces_last_frame", "External Forces", None
         )
         overlays.append(debug_overlay)
 
