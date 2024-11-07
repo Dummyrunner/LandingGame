@@ -32,6 +32,10 @@ class GameFonts:
     BASIC_FONT_SIZE: int = 16
     BASIC_FONT = pygame.font.SysFont(BASIC_FONT_TYPE, BASIC_FONT_SIZE)
 
+    SMALL_FONT_TYPE: str = "Calibri"
+    SMALL_FONT_SIZE: int = 12
+    SMALL_FONT = pygame.font.SysFont(SMALL_FONT_TYPE, SMALL_FONT_SIZE)
+
 
 @dataclass(frozen=True)
 class Opacity:

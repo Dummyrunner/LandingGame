@@ -152,7 +152,7 @@ class Overlay(LandingGameObject):
             isinstance(i, Vec2d) for i in display_value
         ):
             display_value = [
-                f"Vec2d({force.x:.2f}, {force.y:.2f})" for force in display_value
+                f"({force.x:.2f}, {force.y:.2f})" for force in display_value
             ]
 
         return display_value
