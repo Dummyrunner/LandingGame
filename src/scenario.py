@@ -21,6 +21,7 @@ class Scenario:
             self.actions_while_key_pressed,
             self.actions_on_key_down,
         ) = self.create_key_bindings(self.action_dict)
+        self.termination_condition = None
 
     def create_objects(self):
         object_list = LandingGameGroup()

@@ -1,10 +1,11 @@
+from src.scenario import Scenario
 from src.scenario_results_struct import ScenarioResultStruct, ScenarioState
 
 
 class ScenarioTermination:
-    def __init__(self, termination_condition: callable):
+    def __init__(self, scenario: Scenario):
         self.termination_condition: bool = False
-        self.termination_condition: callable = termination_condition
+        self.termination_condition: callable = scenario.termination_condition
         self.result_struct: dict = {}
 
     def execute_termination_if_needed(self):
