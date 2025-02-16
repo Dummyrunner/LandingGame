@@ -33,3 +33,7 @@ def meter_to_pixel(*args) -> float:
     else:
         raise TypeError(f"Only float or Vec2d acceptable, but {type(*args)} given")
     return res
+
+
+def objects_collide(obj1, obj2) -> bool:
+    return obj1.rect.colliderect(obj2.rect)
