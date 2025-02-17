@@ -52,8 +52,8 @@ def main():
 
     dummy_result_values = (ScenarioState.SUCCESS, 123.0, 456.0)
     scenario_termination.assign_values_to_scenario_result_struct(*dummy_result_values)
-    result_struct = scenario_termination.result_struct
-    scenario_termination.execute_termination_if_needed()
+    result_struct = scenario_termination.result_dict
+    scenario_termination.execute_termination()
 
 
 if __name__ == "__main__":
