@@ -6,25 +6,18 @@ class ScenarioTermination:
     def __init__(self, scenario: Scenario):
         self.termination_condition: bool = False
         self.termination_condition: callable = scenario.termination_condition
-        self.result_struct: dict = {}
+        self.result_dict: dict = {}
 
-    def execute_termination_if_needed(self):
+    def execute_termination(self):
         self.termination_stdout_message()
 
     def termination_stdout_message(self):
         print("---------------------- Scenario terminated -----------------------")
-        print("Scenario result struct: \n", self.result_struct)
+        print("Scenario result struct: \n", self.result_dict)
 
     def assign_values_to_scenario_result_struct(
         self, state: ScenarioState, elapsed_time: float, final_score: float
     ):
-        self.result_struct["scenario_state"] = state
-        self.result_struct["elapsed_time"] = elapsed_time
-        self.result_struct["final_score"] = final_score
-
-    def result_struct(self):
-        return ScenarioResultStruct(
-            scenraio_state=ScenarioState.FAILED,
-            elapsed_time=0.0,
-            final_score=0.0,
-        )
+        self.result_dict["scenario_state"] = state
+        self.result_dict["elapsed_time"] = elapsed_time
+        self.result_dict["final_score"] = final_score
