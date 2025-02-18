@@ -4,7 +4,7 @@ from src.vec2d import Vec2d
 
 pixel_to_meter_ratio: float = CommonConstants.PIXEL_TO_METER
 meter_to_pixel_ratio: float = CommonConstants.METER_TO_PIXEL
-timestep_size: float = 1 / 60
+timestep_size: float = 1 / CommonConstants.FPS
 
 
 def pixel_to_meter(*args) -> float:
@@ -37,3 +37,15 @@ def meter_to_pixel(*args) -> float:
 
 def objects_collide(obj1, obj2) -> bool:
     return obj1.rect.colliderect(obj2.rect)
+
+
+def __damage_object(obj, damage: float):
+    obj.health = max(obj.health - damage, 0)
+
+
+def apply_collision_damage(ego, challenger):
+    ego_vertical_v = ego.kinematic.velocity.y
+    challenger_vertical_v = challenger.kinematic.velocity.y
+    vertical_crash_velocity = abs(ego_vertical_v - challenger_vertical_v)
+    damage = vertical_crash_velocity * CommonConstants.EGO_DAMAGE_SENSITIVITY
+    __damage_object(ego, damage)

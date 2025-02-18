@@ -16,6 +16,8 @@ class CommonConstants:
     TIME_STEP: float = 1 / FPS  # seconds
     WINDOW_WIDTH: int = 800
     WINDOW_HEIGHT: int = 600
+    EGO_INITIAL_HEALTH: float = 100
+    EGO_DAMAGE_SENSITIVITY: float = 5
 
 
 @dataclass(frozen=True)
