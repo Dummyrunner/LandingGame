@@ -35,7 +35,7 @@ Orientation https://pet.triquence.org/A02_air_track_framework.pdf
     * Max./Min. boundaries for phyisical attributes
   * Methods
 
-* GlobalPhysics
+* GeneralPhysics
   * Attributes
     * Gravitation
     * Objects affected by Physics []
