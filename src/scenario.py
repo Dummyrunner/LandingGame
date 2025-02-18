@@ -10,6 +10,7 @@ from src.landing_game_object import LandingGameObject
 from src.landing_game_action_on_key import LandingGameActionOnKey, PygameKeyState
 from src.landing_game_action_periodic import LandingGameActionEachFrame
 from src.surface_creator import create_pg_surface_from_color_and_size
+from src.linear_physical_object import LinearPhysicalObject
 
 
 class Scenario:
@@ -42,7 +43,13 @@ class Scenario:
             colors_dict["green"], (CommonConstants.WINDOW_WIDTH, 10)
         )
         ground_position = Vec2d(CommonConstants.WINDOW_WIDTH / 2, 500)
-        ground = LandingGameObject(img_ground, ground_position)
+        ground = LinearPhysicalObject(
+            img_ground,
+            ground_position,
+            mass=1e10,
+            velocity=Vec2d(0, 0),
+            external_forces=[Vec2d(0, 0)],
+        )
         object_list.add(ground)
         object_list.name_object("ground", ground)
 

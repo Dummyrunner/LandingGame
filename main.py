@@ -1,7 +1,7 @@
 import pygame
 from pygame.locals import *
 
-from src.general_physics import objects_collide
+from src.general_physics import objects_collide, apply_collision_damage
 from src.game_window import GameWindow
 from src.vec2d import Vec2d
 from src.common_constants import CommonConstants
@@ -27,7 +27,7 @@ def main():
 
     scenario_termination = ScenarioTermination(scenario)
 
-    while scenario.termination_condition() is False:
+    while not scenario.termination_condition():
         event_handler.process_events(
             scenario.actions_each_frame,
             scenario.actions_while_key_pressed,
@@ -46,13 +46,16 @@ def main():
         for overlay in overlays.overlays:
             overlay.update()
             game_window.display.blit(overlay.image, overlay.rect)
+        ground = scenario.object_list.get_object_by_name("ground")
+        if objects_collide(ego, ground):
+            apply_collision_damage(ego, ground)
         game_timing.update(CommonConstants.TIME_STEP)
         pygame.display.update()
         game_window.clock.tick(game_window.fps)
 
     final_elapsed_time = game_timing.time
     scenario_termination.assign_values_to_scenario_result_struct(
-        ScenarioState.SUCCESS, final_elapsed_time, 456.0
+        ScenarioState.SUCCESS, final_elapsed_time, ego.health
     )
     result_struct = scenario_termination.result_dict
     scenario_termination.execute_termination()

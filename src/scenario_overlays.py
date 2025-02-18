@@ -35,6 +35,7 @@ class ScenarioOverlays:
         debug_overlay.add_attribute(
             ego.kinematic, "external_forces", "External Forces", None
         )
+        debug_overlay.add_attribute(ego, "health", "Health: ", None)
         overlays.append(debug_overlay)
 
         hud_overlay = Overlay(
