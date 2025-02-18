@@ -50,8 +50,10 @@ def main():
         pygame.display.update()
         game_window.clock.tick(game_window.fps)
 
-    dummy_result_values = (ScenarioState.SUCCESS, 123.0, 456.0)
-    scenario_termination.assign_values_to_scenario_result_struct(*dummy_result_values)
+    final_elapsed_time = game_timing.time
+    scenario_termination.assign_values_to_scenario_result_struct(
+        ScenarioState.SUCCESS, final_elapsed_time, 456.0
+    )
     result_struct = scenario_termination.result_dict
     scenario_termination.execute_termination()
 
