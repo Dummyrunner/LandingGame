@@ -1,5 +1,5 @@
 from src.scenario import Scenario
-from src.scenario_results_struct import ScenarioResultStruct, ScenarioState
+from src.scenario_results_struct import ScenarioState
 
 
 class ScenarioTermination:
@@ -9,6 +9,7 @@ class ScenarioTermination:
         self.result_dict: dict = {}
 
     def execute_termination(self):
+
         self.termination_stdout_message()
 
     def termination_stdout_message(self):
