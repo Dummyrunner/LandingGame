@@ -15,3 +15,20 @@ class Rocket(LinearPhysicalObject):
     ):
         LinearPhysicalObject.__init__(self, image, pos, mass, velocity, external_forces)
         self.health: int = CommonConstants.EGO_INITIAL_HEALTH
+
+    def apply_vertical_collision_damage(self, challenger) -> None:
+        """given ego and challenger collide vertically,
+        apply damage to ego based on vertical velocity difference
+
+        Args:
+            ego (): Object that has a velocity and health
+            challenger (LinearPhysicalObject): Object that has a velocity
+        """
+        ego_vertical_v = self.kinematic.velocity.y
+        challenger_vertical_v = challenger.kinematic.velocity.y
+        vertical_crash_velocity = abs(ego_vertical_v - challenger_vertical_v)
+        damage = vertical_crash_velocity * CommonConstants.EGO_DAMAGE_SENSITIVITY
+        self.__damage_object(damage)
+
+    def __damage_object(self, damage: float) -> None:
+        self.health = max(self.health - damage, 0)

@@ -9,7 +9,6 @@ class ScenarioTermination:
         self.result_dict: dict = {}
 
     def execute_termination(self):
-
         self.termination_stdout_message()
 
     def termination_stdout_message(self):

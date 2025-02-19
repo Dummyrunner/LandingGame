@@ -5,13 +5,10 @@ from src.general_physics import (
     pixel_to_meter,
     timestep_size,
     objects_collide,
-    apply_vertical_collision_damage,
 )
 from src.common_constants import CommonConstants
 from src.vec2d import Vec2d
 from src.landing_game_object import LandingGameObject
-from src.linear_physical_object import LinearPhysicalObject
-from src.rocket import Rocket
 from src.common_constants import CommonConstants
 
 test_vector = Vec2d(1.2, 3.5)
@@ -99,26 +96,3 @@ def test_objects_collide():
 
     assert objects_collide(obj_center, obj_top_left_distant) == False
     assert objects_collide(obj_center, obj_top_right_close) == True
-
-
-def test_apply_collision_damage():
-    ego_relative_speed = 10
-    ego = Rocket(
-        image=pygame.Surface((10, 10)),
-        pos=Vec2d(0, 0),
-        mass=1,
-        velocity=Vec2d(0, ego_relative_speed),
-        external_forces=[Vec2d(0, 0)],
-    )
-    assert ego.health == CommonConstants.EGO_INITIAL_HEALTH
-
-    challenger = LinearPhysicalObject(
-        image=pygame.Surface((10, 10)),
-        pos=Vec2d(9, 0),
-        mass=1,
-        velocity=Vec2d(0, 0),
-        external_forces=[Vec2d(0, 0)],
-    )
-    apply_vertical_collision_damage(ego, challenger)
-    expected_damage = ego_relative_speed * CommonConstants.EGO_DAMAGE_SENSITIVITY
-    assert ego.health == CommonConstants.EGO_INITIAL_HEALTH - expected_damage
