@@ -19,7 +19,7 @@ class LandingGameObject(pygame.sprite.Sprite):
 
         Args:
             image (pygame.surface): pygame.surface that defines the object's visual representation
-            pos (Vec2d, optional): 2d Position in pixel. (0,0) represents left top corner. Defaults to Vec2d().
+            pos (Vec2d, optional): 2d Position in pixel. (0,0) represents image center. Defaults to Vec2d().
         """
         super().__init__()
         self.__id = self.id_generator.generate_new_id()
