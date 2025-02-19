@@ -1,7 +1,7 @@
 import pygame
 from pygame.locals import *
 
-from src.general_physics import objects_collide, apply_vertical_collision_damage
+from src.general_physics import objects_collide
 from src.game_window import GameWindow
 from src.vec2d import Vec2d
 from src.common_constants import CommonConstants
@@ -11,6 +11,7 @@ from src.scenario_overlays import ScenarioOverlays
 from src.event_handler import EventHandler
 from src.scenario_termination import ScenarioTermination
 from src.scenario_results_struct import ScenarioState
+from src.rocket import Rocket
 
 
 def main():
@@ -48,7 +49,7 @@ def main():
             game_window.display.blit(overlay.image, overlay.rect)
         ground = scenario.object_list.get_object_by_name("ground")
         if objects_collide(ego, ground):
-            apply_vertical_collision_damage(ego, ground)
+            ego.apply_vertical_collision_damage(ground)
         game_timing.update(CommonConstants.TIME_STEP)
         pygame.display.update()
         game_window.clock.tick(game_window.fps)
