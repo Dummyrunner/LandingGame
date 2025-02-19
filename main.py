@@ -1,7 +1,7 @@
 import pygame
 from pygame.locals import *
 
-from src.general_physics import objects_collide, apply_collision_damage
+from src.general_physics import objects_collide, apply_vertical_collision_damage
 from src.game_window import GameWindow
 from src.vec2d import Vec2d
 from src.common_constants import CommonConstants
@@ -48,7 +48,7 @@ def main():
             game_window.display.blit(overlay.image, overlay.rect)
         ground = scenario.object_list.get_object_by_name("ground")
         if objects_collide(ego, ground):
-            apply_collision_damage(ego, ground)
+            apply_vertical_collision_damage(ego, ground)
         game_timing.update(CommonConstants.TIME_STEP)
         pygame.display.update()
         game_window.clock.tick(game_window.fps)

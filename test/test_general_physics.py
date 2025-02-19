@@ -1,8 +1,18 @@
 import pytest
-from src.general_physics import meter_to_pixel, pixel_to_meter, timestep_size
+import pygame
+from src.general_physics import (
+    meter_to_pixel,
+    pixel_to_meter,
+    timestep_size,
+    objects_collide,
+    apply_vertical_collision_damage,
+)
 from src.common_constants import CommonConstants
 from src.vec2d import Vec2d
-
+from src.landing_game_object import LandingGameObject
+from src.linear_physical_object import LinearPhysicalObject
+from src.rocket import Rocket
+from src.common_constants import CommonConstants
 
 test_vector = Vec2d(1.2, 3.5)
 test_tuple = (1.2, 3.5)
@@ -79,3 +89,36 @@ def test_pixel_meter_conversion_invalid_type():
         meter_to_pixel(invalid_input)
     with pytest.raises(TypeError):
         pixel_to_meter(invalid_input)
+
+
+def test_objects_collide():
+    square = pygame.Surface((10, 10))
+    obj_center = LandingGameObject(square, Vec2d(0, 0))
+    obj_top_left_distant = LandingGameObject(square, Vec2d(20, 20))
+    obj_top_right_close = LandingGameObject(square, Vec2d(9, 0))
+
+    assert objects_collide(obj_center, obj_top_left_distant) == False
+    assert objects_collide(obj_center, obj_top_right_close) == True
+
+
+def test_apply_collision_damage():
+    ego_relative_speed = 10
+    ego = Rocket(
+        image=pygame.Surface((10, 10)),
+        pos=Vec2d(0, 0),
+        mass=1,
+        velocity=Vec2d(0, ego_relative_speed),
+        external_forces=[Vec2d(0, 0)],
+    )
+    assert ego.health == CommonConstants.EGO_INITIAL_HEALTH
+
+    challenger = LinearPhysicalObject(
+        image=pygame.Surface((10, 10)),
+        pos=Vec2d(9, 0),
+        mass=1,
+        velocity=Vec2d(0, 0),
+        external_forces=[Vec2d(0, 0)],
+    )
+    apply_vertical_collision_damage(ego, challenger)
+    expected_damage = ego_relative_speed * CommonConstants.EGO_DAMAGE_SENSITIVITY
+    assert ego.health == CommonConstants.EGO_INITIAL_HEALTH - expected_damage
