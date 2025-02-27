@@ -16,6 +16,8 @@ class CommonConstants:
     TIME_STEP: float = 1 / FPS  # seconds
     WINDOW_WIDTH: int = 800
     WINDOW_HEIGHT: int = 600
+    FUEL_INITIAL_AMOUNT: float = 1e5
+    FUEL_CONSUMPTION_RATE: float = 1e-4
 
 
 @dataclass(frozen=True)

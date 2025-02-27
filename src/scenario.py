@@ -66,13 +66,13 @@ class Scenario:
         action_dict = {}
 
         ego = object_list.get_object_by_name("ego")
-        activate_ego_upwards_boost = lambda: ego.kinematic.external_forces.append(
+        activate_ego_upwards_boost = lambda: ego.activate_engine(
             CommonConstants.ROCKET_UPWARD_BOOST_FORCE_SCALAR * Vec2d(0, -1)
         )
-        activate_left_engine_boost = lambda: ego.kinematic.external_forces.append(
+        activate_left_engine_boost = lambda: ego.activate_engine(
             CommonConstants.ROCKET_SIDEWAYS_BOOST_FORCE_SCALAR * Vec2d(-1, 0)
         )
-        activate_right_engine_boost = lambda: ego.kinematic.external_forces.append(
+        activate_right_engine_boost = lambda: ego.activate_engine(
             CommonConstants.ROCKET_SIDEWAYS_BOOST_FORCE_SCALAR * Vec2d(1, 0)
         )
 
