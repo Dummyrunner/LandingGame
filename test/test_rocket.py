@@ -72,3 +72,28 @@ class TestRocket:
         assert obj.kinematic.velocity == expected_new_velocity_meter
         with pytest.raises(ValueError):
             obj.step(non_admissible_time_step)
+
+    def test_activate_engine(self, example_image):
+        # Given
+        force_vector = Vec2d(0, -1)
+        initial_fuel = 100
+        fuel_consumption_rate = CommonConstants.FUEL_CONSUMPTION_RATE
+        expected_fuel = max(
+            0, initial_fuel - fuel_consumption_rate * force_vector.norm()
+        )
+
+        # When
+        obj = Rocket(
+            image=example_image,
+            pos=self.position,
+            mass=self.mass,
+            velocity=self.velocity,
+            external_forces=[],
+        )
+        obj.fuel = initial_fuel
+        obj.activate_engine(force_vector)
+
+        # Then
+        assert sum(obj.kinematic.external_forces) == force_vector
+        assert obj.fuel == expected_fuel
+        obj.activate_engine(force_vector)
